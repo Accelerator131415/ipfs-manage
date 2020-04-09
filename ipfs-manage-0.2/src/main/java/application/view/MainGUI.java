@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
@@ -19,7 +20,7 @@ import javax.swing.JButton;
 import org.springframework.cglib.transform.impl.AddDelegateTransformer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
+import org.web3j.crypto.CipherException;
 
 import java.awt.GridLayout;
 import java.awt.Color;
@@ -31,7 +32,7 @@ public class MainGUI implements Runnable {
 	private startJPanel infomation;
 	public static CenterController center;
 	private Logger log = Logger.getLogger("ipfs-manage-view");
-	
+	private JButton closeButton,startButton;
 	/**
 	 * Launch the application.
 	 */
@@ -87,7 +88,7 @@ public class MainGUI implements Runnable {
 		frmIpfs.getContentPane().add(Buttons, BorderLayout.WEST);
 		Buttons.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JButton startButton = new JButton("启动");
+		startButton = new JButton("启动");
 		startButton.setForeground(new Color(0, 0, 0));
 		startButton.setBackground(new Color(0, 255, 255));
 		Buttons.add(startButton);
@@ -106,7 +107,19 @@ public class MainGUI implements Runnable {
 						//frmIpfs.getContentPane().add(infomation,BorderLayout.CENTER);
 						//new Thread(infomation).start();
 						infomation.drawStart();
-						center.start();
+						try {
+							center.start();
+							startButton.setEnabled(false);
+							closeButton.setEnabled(true);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							//e.printStackTrace();
+							new IODialog();
+						} catch (CipherException e) {
+							// TODO Auto-generated catch block
+							//e.printStackTrace();
+							new BlockChainDialog();
+						}
 						
 						return null;
 					}
@@ -118,9 +131,10 @@ public class MainGUI implements Runnable {
 		
 		
 		
-		JButton closeButton = new JButton("关闭");
+		closeButton = new JButton("关闭");
 		closeButton.setBackground(new Color(0, 255, 255));
 		Buttons.add(closeButton);
+		closeButton.setEnabled(false);;
 		closeButton.addActionListener(new ActionListener() {
 			
 			@Override
@@ -134,6 +148,8 @@ public class MainGUI implements Runnable {
 						// TODO Auto-generated method stub
 						
 						center.exit();
+						closeButton.setEnabled(false);
+						startButton.setEnabled(true);
 						//infomation = new closeJPanel();
 						//frmIpfs.getContentPane().add(infomation,BorderLayout.CENTER);
 						//new Thread(infomation).start();

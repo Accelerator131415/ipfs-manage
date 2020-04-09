@@ -18,8 +18,10 @@ import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.rx.Web3jRx;
+import org.web3j.tuples.generated.Tuple2;
 import org.web3j.tx.gas.DefaultGasProvider;
 
+import application.MODEL.NODE.hashnode;
 import application.Service.blockChainService;
 import application.blockChain.Table;
 
@@ -38,217 +40,177 @@ public class blockChainServiceImpl implements blockChainService {
 	private Table table;
 	private Logger log = Logger.getLogger("ipfs-manage-Service");
 	
-	public boolean updateNodebackupTable(String filename,String hash) 
+	@Override
+	public boolean updateNodebackupTable(String filename,hashnode hash,String blockIp) throws Exception 
 	{
+		Table one = buildWeb3j(blockIp);
 		
-		try {
-			table.updateNodesbackuptable(filename, hash).send();
-			if(table.getNodesbackuptable(filename).send().equalsIgnoreCase(hash)) 
-			{
-				log.info("更新 "+filename+" 在线表的哈希");
-				return true;
-			}
-			else 
-			{
-				log.info("更新"+filename+"在线表的哈希失败");
-				return false;
-			}
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			log.info("更新"+filename+"在线表的哈希失败，原因：区块链读取异常");
+		one.updateNodesbackuptable(filename, hash.getHash(),new BigInteger(hash.getVersion()+"")).send();
+		if(getNodebackupTable(filename).getHash().equalsIgnoreCase(hash.getHash())) 
+		{
+			//log.info("更新 "+filename+" 在线表的哈希");
+			return true;
+		}
+		else 
+		{
+			//log.info("更新"+filename+"在线表的哈希失败");
 			return false;
 		}
 		
+		
+		
 	}
 	
-	public String getNodebackupTable(String filename)
+	@Override
+	public hashnode getNodebackupTable(String filename) throws Exception
 	{
-		String hash = "";
 		
-		try 
-		{	
-			hash = table.getNodesbackuptable(filename).send();
-			log.info("获取 "+filename+"的在线表的哈希:"+hash);
+		hashnode hash = new hashnode();
+		Tuple2<String,BigInteger> res = table.getNodesbackuptable(filename).send();
+		hash.setHash(res.component1());
+		hash.setVersion(res.component2().intValue());
+		
+		//log.info("获取 "+filename+"的在线表的哈希:"+hash);
 			
-		}catch(Exception e) 
-		{
-			log.info("获取"+filename+"的在线表的哈希失败，原因：区块链读取异常");
-			e.printStackTrace();
-		}
+		
 		
 		return hash;
 			
 	}
 
-	public boolean updateMainnodeTable(String hash) 
+	@Override
+	public boolean updateMainnodeTable(hashnode hash,String blockIp) throws Exception
 	{
-		try 
+		Table one = buildWeb3j(blockIp);
+		
+		one.updateMainnodetable(hash.getHash(),new BigInteger(hash.getVersion()+"")).send();
+		if(getMainnodeTable().getHash().equalsIgnoreCase(hash.getHash())) 
 		{
-			table.updateMainnodetable(hash).send();
-			String update = table.getMainnodetable().send();
-			if(update.equalsIgnoreCase(hash)) 
-			{
-				log.info("更新主节点表成功");
-				return true;
-			}
-			//List<TransactionResult> r = web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, true).send().getBlock().getTransactions();
-			//log.info(t.getLogs().toString());
-			else 
-			{
-				log.info("更新主节点表失败");
-				return false;
-			}
-			
+			return true;
 		}
-		catch(Exception e) 
+		//String update = table.getMainnodetable().send();
+//		if(update.equalsIgnoreCase(hash)) 
+//		{
+//			log.info("更新主节点表成功");
+//			return true;
+//		}
+		//List<TransactionResult> r = web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, true).send().getBlock().getTransactions();
+		//log.info(t.getLogs().toString());
+		else 
 		{
-			log.info("更新主节点表失败，原因：区块链操作异常 ");
-			//e.printStackTrace();
+			//log.info("更新主节点表失败");
 			return false;
 		}
 		
-	
+		
 		
 	}
 
-	public String getMainnodeTable() 
+	public hashnode getMainnodeTable() throws Exception
 	{
-		String hash = "";
-		try 
-		{
-			hash = table.getMainnodetable().send();
-			log.info("获取主节点表成功："+hash);
-		}catch(Exception e) 
-		{
-			log.info("获取主节点表失败，原因：区块链操作异常");
-			e.printStackTrace();
-		}
+		hashnode hash = new hashnode();
+	
+		Tuple2<String,BigInteger> res = table.getMainnodetable().send();
+		//log.info("获取主节点表成功："+hash);
+	
+		hash.setHash(res.component1());
+		hash.setVersion(res.component2().intValue());
 		
 		return hash;
 	}
 	
-	public boolean updateFilehashTable(String hash) 
+	public boolean updateFilehashTable(hashnode hash,String blockIp) throws Exception
 	{
-		try 
+		Table one = buildWeb3j(blockIp);
+		one.updateNamehashtable(hash.getHash(),new BigInteger(hash.getVersion()+"")).send();
+		
+		if(getFilehashTable().getHash().equalsIgnoreCase(hash.getHash())) 
 		{
-			table.updateNamehashtable(hash).send();
-			if(table.getNamehashtable().send().equalsIgnoreCase(hash)) 
-			{
-				log.info("更新文件名-哈希表成功");
-				return true;
-			}
-			else 
-			{
-				log.info("更新文件名-哈希表失败");
-				return false;
-			}
+			//log.info("更新文件名-哈希表成功");
+			return true;
+		}
+		else 
+		{
+			//log.info("更新文件名-哈希表失败");
+			return false;
+		}
 			//log.info(t.getStatus());
-		}catch(Exception e) 
-		{
-			log.info("更新文件名-哈希表失败，原因：区块链操作异常");
-			e.printStackTrace();
-			return false;
-		}
+		
 		
 	}
 	
-	public String getFilehashTable() 
+	public hashnode getFilehashTable() throws Exception
 	{
-		String hash = "";
+		hashnode hash = new hashnode();
 		
-		try 
-		{
-			hash = table.getNamehashtable().send();
-			log.info("获取文件名-哈希表的哈希成功:"+hash);
-		}catch(Exception e) 
-		{
-			log.info("获取文件名-哈希表的哈希失败，原因：区块链操作异常");
-			e.printStackTrace();
-		}
+		
+		Tuple2<String,BigInteger> res = table.getNamehashtable().send();
+		hash.setHash(res.component1());
+		hash.setVersion(res.component2().intValue());
+		//log.info("获取文件名-哈希表的哈希成功:"+hash);
+	
 		
 		return hash;
 	}
 	
 	
-	public boolean updateOnlineTable(String hash) 
+	public boolean updateOnlineTable(hashnode hash,String blockIp) throws Exception
 	{
-		try
+		Table one = buildWeb3j(blockIp);
+		one.updateOnlinetable(hash.getHash(),new BigInteger(hash.getVersion()+"")).send();
+		if(getOnlineTable().getHash().equalsIgnoreCase(hash.getHash())) 
 		{
-			table.updateOnlinetable(hash).send();
-			if(table.getOnlinetable().send().equalsIgnoreCase(hash)) 
-			{
-				log.info("更新在线节点表成功");
-				return true;
-			}
-			else 
-			{
-				log.info("更新在线节点表失败");
-				return true;
-			}
-			
-		}catch(Exception e) 
-		{
-			e.printStackTrace();
-			log.info("更新在线节点表失败,原因：区块链操作异常");
-			return false;
+			//log.info("更新在线节点表成功");
+			return true;
 		}
+		else 
+		{
+			//log.info("更新在线节点表失败");
+			return true;
+		}
+		
+		
 	}
 	
-	public String getOnlineTable() {
-		String hash = "";
-		try 
-		{
-			hash = table.getOnlinetable().send();
-			log.info("获取在线节点表");
-			
-		}catch(Exception e) 
-		{
-			log.info("获取在线节点失败，原因：区块链操作异常");
-			e.printStackTrace();
-		}
+	public hashnode getOnlineTable() throws Exception {
+		hashnode hash = new hashnode();
+		
+		Tuple2<String ,BigInteger> res= table.getOnlinetable().send();
+		hash.setHash(res.component1());
+		hash.setVersion(res.component2().intValue());
+		
 		return hash;
 	}
 	
-	public boolean updateNodeFiletable(String ip,String hash) 
+	public boolean updateNodeFiletable(String ip,hashnode hash,String blockIp) throws Exception
 	{
-		try 
+		
+		Table one = buildWeb3j(blockIp);
+		
+		one.updateNodefiletable(ip, hash.getHash(),new BigInteger(hash.getVersion()+"")).send();
+		if(getNodeFiletable(ip).getHash().equalsIgnoreCase(hash.getHash())) 
 		{
-			table.updateNodefiletable(ip, hash).send();
-			if(table.getNodefiletable(ip).send().equalsIgnoreCase(hash)) 
-			{
-				log.info("更新节点备份文件表成功");
-				return true;
-			}
-			else 
-			{
-				log.info("更新节点备份表失败");
-				return false;
-			}
-			
-		}catch(Exception e) 
+			//log.info("更新节点备份文件表成功");
+			return true;
+		}
+		else 
 		{
-			log.info("更新节点备份文件表失败，原因：区块链操作异常");
-			e.printStackTrace();
+			//log.info("更新节点备份表失败");
 			return false;
 		}
+		
+		
 	}
 	
-	public String getNodeFiletable(String ip) 
+	public hashnode getNodeFiletable(String ip) throws Exception
 	{
-		String hash = "";
+		hashnode hash = new hashnode();
+		Tuple2<String,BigInteger> res = table.getNodefiletable(ip).send();
+		hash.setHash(res.component1());
+		hash.setVersion(res.component2().intValue());
 		
-		try 
-		{
-			hash = table.getNodefiletable(ip).send();
-			
-			log.info("获取节点:\""+ip+"\"的节点备份表哈希值成功");
-		}catch(Exception e) 
-		{
-			log.info("获取节点:\""+ip+"\"的节点备份表哈希值失败，原因：区块链操作异常");
-			e.printStackTrace();
-		}
+		//log.info("获取节点:\""+ip+"\"的节点备份表哈希值成功");
+		
 		return hash;
 	}
 	
@@ -357,6 +319,8 @@ public class blockChainServiceImpl implements blockChainService {
 		
 		return yu_main;
 	}
+	
+
 
 	@Override
 	public void start(String blockChainIp, String filepath, String password) throws IOException, CipherException {
@@ -387,8 +351,22 @@ public class blockChainServiceImpl implements blockChainService {
 		
 	}
 
+	@Override
+	public Table buildWeb3j(String ip) {
+		// TODO Auto-generated method stub
+		String RPC_URL = "http://"+ip+":"+port;
+		Web3j web3 = Web3j.build(new HttpService(RPC_URL));
+		Table one = Table.load(contractAddr, web3, credential, new DefaultGasProvider());
+		return one;
+	}
+
+	
+
+
+	}
+
 	
 
 	
 	
-}
+

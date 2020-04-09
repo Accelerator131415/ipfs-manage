@@ -49,9 +49,6 @@ public class startJPanel extends JPanel {
 	private JTextField passwordField;
 	public startJPanel() {
 		super();
-		
-
-
 	}
 
 	public void drawStart() 
@@ -414,9 +411,41 @@ public class startJPanel extends JPanel {
 		
 		JButton commitButton = new JButton("确定");
 		Buttonpanel.add(commitButton);
+		commitButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					MainGUI.center.initProgram(ipfsField.getText(), blockChainIpField.getText(), blockChainFileAddr.getText(), passwordField.getText());
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		
 		JButton cancelButton = new JButton("取消");
 		Buttonpanel.add(cancelButton);
+		cancelButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					initNode info = MainGUI.center.readInitInfo();
+					blockChainIpField.setText(info.getBlockChainIp());
+					blockChainFileAddr.setText(info.getBlockChainFilepath());
+					passwordField.setText(info.getBlockChainPassword());
+					ipfsField.setText(info.getIpfsIp());
+					
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 		
 		JPanel textpanel = new JPanel();
 		add(textpanel, BorderLayout.CENTER);
