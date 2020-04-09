@@ -1,5 +1,6 @@
 package application.ControllerImpl;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Logger;
@@ -28,7 +29,9 @@ public class IpfsControllerImpl implements IpfsController {
 	NameHashTableService namehashtable;
 	@Resource(name = "IPFSFileTableService")
 	IPFSFileTableService ipfsfile;
-
+	@Resource(name = "initService")
+	initService initService;
+	
 	private Logger log = Logger.getLogger("ipfs-manage-Controller");
 	
 	
@@ -106,6 +109,13 @@ public class IpfsControllerImpl implements IpfsController {
 		
 		
 		
+	}
+
+	@Override
+	public void startIpfs() throws IOException {
+		// TODO Auto-generated method stub
+		initNode info = initService.readInfo();
+		ipfs.start(info.getIpfsIp());
 	}
 
 }

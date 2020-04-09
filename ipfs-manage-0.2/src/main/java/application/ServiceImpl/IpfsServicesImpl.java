@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import org.springframework.stereotype.*;
 
 import application.Service.IpfsServices;
+import application.Service.initService;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.MerkleNode;
 import io.ipfs.api.NamedStreamable;
@@ -18,10 +19,10 @@ import io.ipfs.multihash.Multihash;
 @Service("IpfsServices")
 public class IpfsServicesImpl implements IpfsServices {
 
-	private IPFS ipfs = new IPFS("/ip4/192.168.43.135/tcp/5001");
-	private String downloadAddr = Thread.currentThread().getContextClassLoader().getResource("").getPath()+"实验文件夹/";
-	private String backupAddr = Thread.currentThread().getContextClassLoader().getResource("").getPath()+"备份文件夹/";
-	private String tableAddr = Thread.currentThread().getContextClassLoader().getResource("").getPath()+"节点维护表/";
+	private IPFS ipfs;// = new IPFS("/ip4/192.168.43.135/tcp/5001");
+	private String downloadAddr = initService.defaultAddr+"实验文件夹\\";
+	private String backupAddr = initService.defaultAddr+"备份文件夹\\";
+	private String tableAddr = initService.defaultAddr+"节点维护表\\";
 	private Logger log = Logger.getLogger("ipfs-manage-Service");
 	
 	public IpfsServicesImpl() 
@@ -244,4 +245,15 @@ public class IpfsServicesImpl implements IpfsServices {
 	{
 		return tableAddr;
 	}
+
+	@Override
+	public void start(String ip) {
+		// TODO Auto-generated method stub
+		
+		ipfs = new IPFS("/ip4/"+ip+"/tcp/5001");
+		
+	}
+
+
+
 }

@@ -28,5 +28,6 @@ public interface IpfsServices {
 	//获取指定hash的默克尔有向无环图
 	//public String getMerkleTree(String hash);
 	
+	public void start(String ip);
 	
 }

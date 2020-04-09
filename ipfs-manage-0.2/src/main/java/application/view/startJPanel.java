@@ -3,11 +3,12 @@ package application.view;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
-import java.util.logging.Logger;
+//import java.util.logging.Logger;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
+import application.MODEL.NODE.initNode;
 import application.MODEL.TABLE.IPFSFileTable;
 import application.MODEL.TABLE.NamehashTable;
 
@@ -16,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
@@ -24,9 +26,14 @@ import java.awt.FlowLayout;
 public class startJPanel extends JPanel {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Create the panel.
 	 */
-	private Logger log = Logger.getLogger("ipfs-manage-view");
+	//private Logger log = Logger.getLogger("ipfs-manage-view");
 	
 	private JLabel serviceInfo;
 	private JTextField serchFile;
@@ -36,8 +43,14 @@ public class startJPanel extends JPanel {
 	private JTextField path;
 	private JTextField filename;
 	private JTextField hash;
+	private JTextField blockChainIpField;
+	private JTextField ipfsField;
+	private JTextField blockChainFileAddr;
+	private JTextField passwordField;
 	public startJPanel() {
 		super();
+		
+
 
 	}
 
@@ -386,5 +399,82 @@ public class startJPanel extends JPanel {
 		setVisible(true);
 		repaint();
 	}
+	
+	public void drawSet() 
+	{
+		removeAll();
+		setLayout(new BorderLayout(0, 0));
+		JLabel titleLabel = new JLabel("配置信息");
+		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		add(titleLabel, BorderLayout.NORTH);
+		
+		JPanel Buttonpanel = new JPanel();
+		add(Buttonpanel, BorderLayout.SOUTH);
+		Buttonpanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JButton commitButton = new JButton("确定");
+		Buttonpanel.add(commitButton);
+		
+		JButton cancelButton = new JButton("取消");
+		Buttonpanel.add(cancelButton);
+		
+		JPanel textpanel = new JPanel();
+		add(textpanel, BorderLayout.CENTER);
+		textpanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JPanel panel_1 = new JPanel();
+		textpanel.add(panel_1);
+		
+		JLabel Label1 = new JLabel("本地区块链ip地址：");
+		panel_1.add(Label1);
+		
+		blockChainIpField = new JTextField();
+		panel_1.add(blockChainIpField);
+		blockChainIpField.setColumns(40);
+		
+		JPanel panel_3 = new JPanel();
+		textpanel.add(panel_3);
+		
+		JLabel Label3 = new JLabel("区块链密钥文件地址：");
+		panel_3.add(Label3);
+		
+		blockChainFileAddr = new JTextField();
+		panel_3.add(blockChainFileAddr);
+		blockChainFileAddr.setColumns(40);
+		
+		JPanel panel = new JPanel();
+		textpanel.add(panel);
+		
+		JLabel lable4 = new JLabel("区块链密钥文件密码：");
+		panel.add(lable4);
+		
+		passwordField = new JTextField();
+		panel.add(passwordField);
+		passwordField.setColumns(40);
+		
+		JPanel panel_2 = new JPanel();
+		textpanel.add(panel_2);
+		
+		JLabel Lable2 = new JLabel("ipfs服务IP地址：");
+		panel_2.add(Lable2);
+		
+		ipfsField = new JTextField();
+		ipfsField.setColumns(40);
+		panel_2.add(ipfsField);
+		
+		try {
+			initNode info = MainGUI.center.readInitInfo();
+			blockChainIpField.setText(info.getBlockChainIp());
+			blockChainFileAddr.setText(info.getBlockChainFilepath());
+			passwordField.setText(info.getBlockChainPassword());
+			ipfsField.setText(info.getIpfsIp());
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
 }

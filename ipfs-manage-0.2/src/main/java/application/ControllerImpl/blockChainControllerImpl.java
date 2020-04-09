@@ -1,12 +1,15 @@
 package application.ControllerImpl;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.web3j.crypto.CipherException;
 
 import application.Controller.blockChainController;
+import application.MODEL.NODE.initNode;
 import application.Service.*;
 
 @Controller("blockChainController")
@@ -28,7 +31,8 @@ public class blockChainControllerImpl implements blockChainController {
 	IPFSFileTableService nodebackuptable;
 	@Resource(name = "FileBackupTableService")
 	FileBackupTableService nodefiletable;
-	
+	@Resource(name = "initService")
+	initService initService;
 	
 	public void updateLocalTable() 
 	{
@@ -90,8 +94,7 @@ public class blockChainControllerImpl implements blockChainController {
 		String hash = blockChain.getNodeFiletable(ip);
 		ipfs.DownloadTable(hash, nodefiletable.getTABLE(ip));
 	}
-	
-	
+		
 	public boolean updateNodebackTable(String filehash,String hash) 
 	{
 		return blockChain.updateNodebackupTable(filehash, hash);
@@ -102,5 +105,10 @@ public class blockChainControllerImpl implements blockChainController {
 		return blockChain.updateNodeFiletable(ip, hash);
 	}
 
-
+	@Override
+	public void startBlockChain() throws IOException, CipherException {
+		// TODO Auto-generated method stub
+		initNode info = initService.readInfo();
+		blockChain.start(info.getBlockChainIp(), info.getBlockChainFilepath(), info.getBlockChainPassword());
+	}
 }

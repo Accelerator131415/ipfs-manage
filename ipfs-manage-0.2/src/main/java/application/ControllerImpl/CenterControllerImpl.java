@@ -9,6 +9,7 @@ import application.Controller.blockChainController;
 import application.MODEL.NET.UnlineMessage;
 import application.MODEL.NODE.IPFSNode;
 import application.MODEL.NODE.MainNode;
+import application.MODEL.NODE.initNode;
 import application.MODEL.TABLE.FileBackupTable;
 import application.MODEL.TABLE.IPFSFileTable;
 import application.MODEL.TABLE.MainNodeTable;
@@ -16,7 +17,9 @@ import application.MODEL.TABLE.NamehashTable;
 import application.Service.*;
 import org.springframework.stereotype.Controller;
 //import jdk.internal.org.jline.utils.Log;
+import org.web3j.crypto.CipherException;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -54,6 +57,8 @@ public class CenterControllerImpl implements CenterController {
 	private IpfsController ipfsuse;
 	@Resource(name = "NameHashTableService")
 	private NameHashTableService namehash;
+	@Resource(name = "initService")
+	private initService initService;
 	
 	private Thread RecieveThread,backupThread,sendThread,selfdispatchThread;
 	
@@ -67,8 +72,11 @@ public class CenterControllerImpl implements CenterController {
 	//3.开启备份服务
 	//4.开启发送信息服务
 	//5.开启自我检查待备份列表的服务
-	public void start() 
+	public void start() throws IOException, CipherException 
 	{
+		
+		ipfsuse.startIpfs();
+		blockChain.startBlockChain();
 		
 		try {
 			String hash;
@@ -251,6 +259,24 @@ public class CenterControllerImpl implements CenterController {
 	{
 		blockChain.updateLocalNodebackTable(filehash);
 		return fileonlinetable.getIPFSFileTablebyhash(filehash);
+	}
+
+
+	@Override
+	public initNode readInitInfo() throws IOException {
+		// TODO Auto-generated method stub
+		
+		return initService.readInfo();
+		
+		//return null;
+	}
+
+
+	@Override
+	public void initProgram(String ipfsIp, String blockChainIp, String filepath, String password) throws IOException {
+		// TODO Auto-generated method stub
+		
+		initService.initProgram(ipfsIp, blockChainIp, filepath, password);
 	}
 
 	

@@ -180,12 +180,25 @@ public class MainGUI implements Runnable {
 		JButton infoButton = new JButton("文件信息");
 		infoButton.setBackground(new Color(0, 255, 255));
 		Buttons.add(infoButton);
+		
 		infoButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				infomation.drawSerch();
+			}
+		});
+		
+		JButton setButton = new JButton("设置");
+		Buttons.add(setButton);
+		setButton.setBackground(new Color(0,255,255));
+		setButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				infomation.drawSet();
 			}
 		});
 		

@@ -1,5 +1,7 @@
 package application.Controller;
 
+import java.io.IOException;
+
 public interface IpfsController {
 
 	
@@ -13,7 +15,7 @@ public interface IpfsController {
 	
 	public boolean backup(String hash);
 	
-	
+	public void startIpfs() throws IOException;
 	
 	
 }

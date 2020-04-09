@@ -13,12 +13,13 @@ import org.springframework.stereotype.Service;
 
 import application.MODEL.TABLE.OnlineNodeTable;
 import application.Service.OnlineNodeTableService;
+import application.Service.initService;
 
 
 @Service("OnlineNodeTableService")
 public class OnlineNodeTableServiceImpl implements OnlineNodeTableService {
 
-	private String addr =Thread.currentThread().getContextClassLoader().getResource("").getPath()+"节点维护表/";
+	private String addr = initService.defaultAddr+"节点维护表\\";
 	private final String TABLE = "OnlineNode.table";
 	private Logger log = Logger.getLogger("ipfs-manage-Service");
 	

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import application.MODEL.NODE.NameHashNode;
 import application.MODEL.TABLE.NamehashTable;
 import application.Service.NameHashTableService;
+import application.Service.initService;
 
 
 
@@ -21,7 +22,7 @@ import application.Service.NameHashTableService;
 public class NameHashTableServiceImpl implements NameHashTableService{
 
 	private final String TABLE = "NameHashTable.table";
-	private String addr = Thread.currentThread().getContextClassLoader().getResource("").getPath()+"节点维护表/";
+	private String addr = initService.defaultAddr+"节点维护表\\";
 	private Logger log = Logger.getLogger("ipfs-manage-Service");
 	
 	public NameHashTableServiceImpl() 

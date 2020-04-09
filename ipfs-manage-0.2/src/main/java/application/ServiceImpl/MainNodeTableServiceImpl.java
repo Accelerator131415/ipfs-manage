@@ -14,11 +14,12 @@ import org.springframework.stereotype.Service;
 import application.MODEL.NODE.MainNode;
 import application.MODEL.TABLE.MainNodeTable;
 import application.Service.MainNodeTableService;
+import application.Service.initService;
 
 @Service("MainNodeTableService")
 public class MainNodeTableServiceImpl implements MainNodeTableService {
 
-	private String addr = Thread.currentThread().getContextClassLoader().getResource("").getPath()+"节点维护表/";
+	private String addr = initService.defaultAddr+"节点维护表\\";
 	private final String TABLE = "MainNodeTable.table";
 	private Logger log = Logger.getLogger("ipfs-manage-Service");
 	

@@ -15,13 +15,14 @@ import org.springframework.stereotype.Service;
 
 import application.MODEL.TABLE.FileBackupTable;
 import application.Service.FileBackupTableService;
+import application.Service.initService;
 
 
 
 @Service("FileBackupTableService")
 public class FileBackupTableServiceImpl implements FileBackupTableService {
 
-	private String addr = Thread.currentThread().getContextClassLoader().getResource("").getPath()+"节点维护表/";
+	private String addr = initService.defaultAddr+"节点维护表\\";
 	private String TABLE;
 	private Logger log = Logger.getLogger("ipfs-manage-Service");
 	

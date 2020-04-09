@@ -1,11 +1,13 @@
 package application.ServiceImpl;
 
 import java.awt.List;
+import java.io.IOException;
 import java.math.*;
 import java.util.logging.Logger;
 
 
 import org.springframework.stereotype.Service;
+import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.*;
@@ -27,6 +29,7 @@ public class blockChainServiceImpl implements blockChainService {
 
 	private static final String RPC_URL = "http://192.168.43.135:1314";
 	private static final Web3j web3 = Web3j.build(new HttpService(RPC_URL));
+	private String port = "1314";
 	//private String blockAccount = "0x067dea8624407ccce9344684f65ea638d4d2cddc";
 	private Credentials credential;
 	private String contractAddr = "0xd71977967f73a513b65ae2012c5099e501cc77c0";
@@ -34,38 +37,6 @@ public class blockChainServiceImpl implements blockChainService {
 	private String filepath = "N:\\blockchain\\data\\keystore\\UTC--2020-03-25T11-33-08.192202800Z--2db370c14100919c6b8d14c5f71ff357d45fbdd3";
 	private Table table;
 	private Logger log = Logger.getLogger("ipfs-manage-Service");
-	
-	public blockChainServiceImpl() 
-	{
-		try 
-		{
-			//Web3ClientVersion web3clientversion = web3j.web3ClientVersion().send()			
-			credential = WalletUtils.loadCredentials(password, filepath);
-			
-			
-			table = Table.load(contractAddr, web3, credential, new DefaultGasProvider());
-			table.setGasProvider(new DefaultGasProvider() 
-			{
-				public BigInteger getGasPrice(String coutractFunc) 
-				{
-					return BigInteger.valueOf(10000L);
-				}
-				
-				public BigInteger getGasLimit(String contractFunc) 
-				{
-					return BigInteger.valueOf(5000000000L);
-				}
-				
-				
-			});
-			log.info("启动区块链服务");
-		}catch(Exception e) 
-		{
-			e.printStackTrace();
-			log.info("启动区块链服务失败");
-		}
-		
-	}
 	
 	public boolean updateNodebackupTable(String filename,String hash) 
 	{
@@ -387,6 +358,36 @@ public class blockChainServiceImpl implements blockChainService {
 		return yu_main;
 	}
 
+	@Override
+	public void start(String blockChainIp, String filepath, String password) throws IOException, CipherException {
+		// TODO Auto-generated method stub
+		
+			//Web3ClientVersion web3clientversion = web3j.web3ClientVersion().send()			
+			credential = WalletUtils.loadCredentials(password, filepath);
+			String RPC_URL = "http://"+blockChainIp+":"+port;
+			Web3j web3 = Web3j.build(new HttpService(RPC_URL));
+			
+			table = Table.load(contractAddr, web3, credential, new DefaultGasProvider());
+			table.setGasProvider(new DefaultGasProvider() 
+			{
+				public BigInteger getGasPrice(String coutractFunc) 
+				{
+					return BigInteger.valueOf(10000L);
+				}
+				
+				public BigInteger getGasLimit(String contractFunc) 
+				{
+					return BigInteger.valueOf(5000000000L);
+				}
+				
+				
+			});
+			log.info("启动区块链服务");
+		
+		
+	}
+
+	
 
 	
 	

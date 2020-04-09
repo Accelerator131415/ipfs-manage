@@ -14,13 +14,14 @@ import org.springframework.stereotype.Service;
 import application.MODEL.NODE.IPFSNode;
 import application.MODEL.TABLE.IPFSFileTable;
 import application.Service.IPFSFileTableService;
+import application.Service.initService;
 
 
 @Service("IPFSFileTableService")
 public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 	
 	
-	private String addr = Thread.currentThread().getContextClassLoader().getResource("").getPath()+"节点维护表/";	
+	private String addr = initService.defaultAddr+"节点维护表\\";	
 	private double yu_no = 0.5;
 	private double yu_on = 0.3;
  	private String TABLE;

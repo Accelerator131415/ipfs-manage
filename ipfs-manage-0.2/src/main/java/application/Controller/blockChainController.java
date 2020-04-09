@@ -1,5 +1,8 @@
 package application.Controller;
 
+import java.io.IOException;
+
+import org.web3j.crypto.CipherException;
 
 //负责所有表的更新，在ipfsController修改表之前都要调用这个类
 public interface blockChainController {
@@ -21,4 +24,6 @@ public interface blockChainController {
 	public boolean updateNodebackTable(String filehash,String hash);
 	
 	public boolean updateNodefileTable(String ip,String hash);
+
+	public void startBlockChain() throws IOException, CipherException;
 }

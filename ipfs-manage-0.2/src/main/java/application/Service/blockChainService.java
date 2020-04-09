@@ -1,9 +1,15 @@
 package application.Service;
 
+import java.io.IOException;
+
+import org.web3j.crypto.CipherException;
+
 public interface blockChainService {
 
 	//public int getBalance();
 
+	
+	public void start(String blockChainIp,String filepath,String password) throws IOException, CipherException;
 	
 	//更新指定文件的在线文件表的hash值，表示节点的在线状态已经改变了
 	public boolean updateNodebackupTable(String filename,String hash) ;
