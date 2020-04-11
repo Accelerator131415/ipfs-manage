@@ -49,12 +49,12 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 				table.createNewFile();
 			}
 			
-			log.info("建立新表："+filename);
+			//log.info("建立新表："+filename);
 			return true;
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("建表\""+filename+"\"失败");
+			//log.info("建表\""+filename+"\"失败");
 		}
 		
 		
@@ -74,7 +74,7 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 				//System.out.println("have no the table");
 				
 				//table.createNewFile();
-				log.info("插入新节点失败，原因：目标表"+filename+"不存在");
+				//log.info("插入新节点失败，原因：目标表"+filename+"不存在");
 				return false;
 			}
 			if(isExistNode(inode,filename)) 
@@ -85,7 +85,7 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 			}
 			FileWriter fw = new FileWriter(table,true);
 			fw.write(content);
-			log.info("已于"+filename+"表中插入新节点\""+inode.getIp()+"\"");
+			//log.info("已于"+filename+"表中插入新节点\""+inode.getIp()+"\"");
 			fw.flush();
 			fw.close();
 			return true;
@@ -93,7 +93,7 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("向"+filename+"表中插入新节点\""+inode.getIp()+"\"失败");
+			//log.info("向"+filename+"表中插入新节点\""+inode.getIp()+"\"失败");
 		}
 		
 		
@@ -138,7 +138,7 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 			}
 			FileWriter fw = new FileWriter(new File(filename+".table"),false);
 			fw.write(bufall.toString());
-			log.info("更新表:"+filename+"中,节点"+inode.getIp()+"信息成功");
+			//log.info("更新表:"+filename+"中,节点"+inode.getIp()+"信息成功");
 			fw.flush();
 			fw.close();
 			br.close();
@@ -146,7 +146,7 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("更新表:"+filename+"中,节点"+inode.getIp()+"信息失败");
+			//log.info("更新表:"+filename+"中,节点"+inode.getIp()+"信息失败");
 		}finally
 		{
 			try {
@@ -175,7 +175,7 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 				if(line.startsWith(inode.getIp())) 
 				{
 					
-					log.info("节点"+inode.getIp()+"已存在于表"+filename+"中");
+					//log.info("节点"+inode.getIp()+"已存在于表"+filename+"中");
 					return true;
 				}
 			}
@@ -193,7 +193,7 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 				e.printStackTrace();
 			}
 		}
-		log.info("节点"+inode.getIp()+"不存在与表"+filename+"中");
+		//log.info("节点"+inode.getIp()+"不存在与表"+filename+"中");
 		return false;
 	}
 
@@ -204,7 +204,7 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 		String line;
 		int middle = 0,end =0;
 		IPFSNode inode;
-		log.info("开始获取文件"+filename+"的节点信息");
+		//log.info("开始获取文件"+filename+"的节点信息");
 		try 
 		{
 			br = new BufferedReader(new FileReader(addr + filename+".table"));
@@ -232,13 +232,13 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 					inode.setOnline(false);
 				}
 				list.add(inode);
-				log.info("已获取节点：\""+inode.getIp()+"\"的信息");
+				//log.info("已获取节点：\""+inode.getIp()+"\"的信息");
 			}
 			
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("获取表："+filename+"中的节点信息失败");
+			//log.info("获取表："+filename+"中的节点信息失败");
 		}
 		
 		
@@ -264,7 +264,7 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 			e.printStackTrace();
 		}
 			
-		log.info("获取表"+filename+"中的节点的总数为:"+num);
+		//log.info("获取表"+filename+"中的节点的总数为:"+num);
 		return num;
 	}
 	
@@ -311,7 +311,7 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 			}
 		}
 		
-		log.info("获取表"+filename+"中的在线可用的节点总数为:"+nums);
+		//log.info("获取表"+filename+"中的在线可用的节点总数为:"+nums);
 		return nums;
 	}
 

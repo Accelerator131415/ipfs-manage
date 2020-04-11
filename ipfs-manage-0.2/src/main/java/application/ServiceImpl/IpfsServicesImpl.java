@@ -76,7 +76,7 @@ public class IpfsServicesImpl implements IpfsServices {
 			Multihash filePointer = Multihash.fromBase58(hash);
 			//List<MerkleNode> mns = ipfs.ls(filePointer);
 			byte[] file = ipfs.cat(filePointer);			
-			File downloadfile = new File(downloadAddr + hash +filename);
+			File downloadfile = new File(downloadAddr+filename);
 			
 			if(!downloadfile.exists()) 
 			{
@@ -84,8 +84,7 @@ public class IpfsServicesImpl implements IpfsServices {
 			}
 			if(hash.equalsIgnoreCase("")) 
 			{
-				//log.info("原文件不存在");
-				
+				//log.info("原文件不存在");				
 				return;
 			}
 			
@@ -93,12 +92,12 @@ public class IpfsServicesImpl implements IpfsServices {
 			fop.write(file);
 			fop.flush();
 			fop.close();
-			log.info("从IPFS中下载了文件："+filename+"\n"
-					+"文件哈希值为:"+hash);
+			//log.info("从IPFS中下载了文件："+filename+"\n"
+			//		+"文件哈希值为:"+hash);
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("从IPFS中下载文件："+filename+"失败");
+			//log.info("从IPFS中下载文件："+filename+"失败");
 		}
 		
 		
@@ -120,10 +119,11 @@ public class IpfsServicesImpl implements IpfsServices {
 			}
 			
 			Multihash filePointer = Multihash.fromBase58(hash);
+			//log.info("看看hash:"+hash);
+			//log.info("看看filePointer:"+filePointer.toString());
 			//List<MerkleNode> mns = ipfs.ls(filePointer);
 			byte[] file = ipfs.cat(filePointer);			
-			
-			
+						
 			FileOutputStream fop = new FileOutputStream(downloadTable,false);
 			
 			//FileWriter fw = new FileWriter(downloadTable,false);
@@ -136,17 +136,10 @@ public class IpfsServicesImpl implements IpfsServices {
 		{
 			e.printStackTrace();
 			//log.info("从IPFS中下载文件："+filename+"失败");
-		}
-		
-		
-		
-		
+		}		
 	}
 	
-	public void backup(String hash) {
-		
-		
-		
+	public void backup(String hash) {		
 		/*
 		for(int i=0;i<filehashList.size();i++) 
 		{

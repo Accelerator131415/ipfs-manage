@@ -69,14 +69,14 @@ public class backupControllerImpl implements backupController {
 		{
 			backupNode newone = new backupNode();
 			newone.setFilehash(files.get(i));
-			
+			log.info(">>>:"+files.get(i));
 			//从区块链中下载该备份文件的已备份的节点表，如果曾经备份过，那就在原来的在线节点的数量的基础上去重新备份文件
 			blockChain.updateLocalNodebackTable(files.get(i));
 			IPFSFileTable itable = nodebackuptable.getIPFSFileTablebyhash(files.get(i));
 			
 			newone.setNum(itable.getOnlinenum());
 			
-			backuplist.put(filehash,newone);
+			backupController.addBackuplist(filehash, newone);
 		}
 	}
 

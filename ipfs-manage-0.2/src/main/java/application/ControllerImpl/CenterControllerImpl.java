@@ -112,13 +112,13 @@ public class CenterControllerImpl implements CenterController {
 			
 			for(int i=0;i<nodetable.getNum();i++) 
 			{
-				String filehash = nodetable.getFiles().get(i),updatehash ;
+				String filehash = nodetable.getFiles().get(i) ;
 				hashnode ha = new hashnode();
 				do 
 				{					
 					hashnode nodeback = blockChain.updateLocalNodebackTable(filehash);					
 					fileonlinetable.InsertNode(inode,filehash);
-					updatehash = ipfs.UploadFile(ipfs.getTableaddr()+nodefiletable.getTABLE(ip.getHostAddress()));
+					String updatehash = ipfs.UploadFile(ipfs.getTableaddr()+nodefiletable.getTABLE(ip.getHostAddress()));
 					ha.setHash(updatehash);
 					ha.setVersion(nodeback.getVersion());
 					

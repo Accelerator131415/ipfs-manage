@@ -12,11 +12,11 @@ import application.blockChain.Table;
 
 public class blockChainServiceTest {
 
-	//@Test
-	public void test1() 
+	@Test
+	public void test1() throws IOException, CipherException 
 	{
 		blockChainService bcs = new blockChainServiceImpl();
-		
+		bcs.start("192.168.99.1", "N:\\blockchain\\data\\keystore\\UTC--2020-03-25T11-33-08.192202800Z--2db370c14100919c6b8d14c5f71ff357d45fbdd3", "123");
 		//bcs.getFilehashTable();
 		//bcs.getMainnodeTable();
 		
@@ -40,7 +40,7 @@ public class blockChainServiceTest {
 		//bcs.getYu();
 	}
 	
-	@Test
+	//@Test
 	public void test2() throws IOException, CipherException 
 	{
 		blockChainService bcs = new blockChainServiceImpl();

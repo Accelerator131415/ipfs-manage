@@ -1,12 +1,16 @@
+import java.util.logging.Logger;
+
 import org.junit.*;
 
 import application.MODEL.NODE.MainNode;
 import application.MODEL.TABLE.MainNodeTable;
 import application.Service.MainNodeTableService;
 import application.ServiceImpl.MainNodeTableServiceImpl;
+import jdk.internal.org.jline.utils.Log;
 
 public class MainNodeTableServiceTest {
 
+	private Logger log = Logger.getLogger("asdadsd");
 	
 	public void test1() 
 	{
@@ -20,7 +24,7 @@ public class MainNodeTableServiceTest {
 		mts.InsertNode(mnode);
 	}
 	
-	@Test
+	//@Test
 	public void test2() 
 	{
 		MainNodeTableService mts = new MainNodeTableServiceImpl();
@@ -33,5 +37,19 @@ public class MainNodeTableServiceTest {
 			
 			
 		}
+	}
+	@Test
+	public void test3() 
+	{
+		MainNodeTableService mts = new MainNodeTableServiceImpl();
+		MainNodeTable mtable = mts.getTable();
+		for(int i=0;i<mtable.getNum();i++) 
+		{
+			//System.out.println("hash:"+mtable.getTable().get(i).getFilehash()+" ip:"+mtable.getTable().get(i).getMainIp());
+			log.info(mtable.getTable().get(i).getFilehash()+"-"+mtable.getTable().get(i).getMainIp());
+			
+		}
+		
+		
 	}
 }

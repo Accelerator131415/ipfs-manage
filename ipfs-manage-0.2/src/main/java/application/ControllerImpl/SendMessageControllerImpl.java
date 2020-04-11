@@ -93,7 +93,7 @@ public class SendMessageControllerImpl implements SendMessageController {
 						
 						for(int a=0;a<hadsend.size();a++) 
 						{
-							if(hadsend.get(i).equalsIgnoreCase(one.getBackupIp()) || nodebackup.getNodebyIp(one.getBackupIp())!=null)
+							if(hadsend.get(a).equalsIgnoreCase(one.getBackupIp()) || nodebackup.getNodebyIp(one.getBackupIp())!=null)
 							{
 								issend =true;
 							}
@@ -113,13 +113,15 @@ public class SendMessageControllerImpl implements SendMessageController {
 					
 				}
 				
-				try {
-					Thread.sleep(waittime);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}	
+				
 			}
+			
+			try {
+				Thread.sleep(waittime);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
 		}
 		log.info("已关闭备份信息发送服务");
 		

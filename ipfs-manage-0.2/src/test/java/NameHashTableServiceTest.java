@@ -1,15 +1,19 @@
+import java.util.logging.Logger;
+
 import org.junit.*;
 
 import application.MODEL.NODE.NameHashNode;
 import application.MODEL.TABLE.NamehashTable;
 import application.Service.NameHashTableService;
 import application.ServiceImpl.NameHashTableServiceImpl;
+import jdk.internal.org.jline.utils.Log;
 
 
 public class NameHashTableServiceTest {
 
+	private Logger log = Logger.getLogger("as");
 	
-	@Test
+	//@Test
 	public void test1() 
 	{
 		NameHashTableService ntable = new NameHashTableServiceImpl();
@@ -33,7 +37,7 @@ public class NameHashTableServiceTest {
 	
 		ntable.InsertNode(nnode);
 	}
-	
+	@Test
 	public void test3() 
 	{
 		NameHashTableService ntable = new NameHashTableServiceImpl();
@@ -42,8 +46,8 @@ public class NameHashTableServiceTest {
 		//System.out.println(nnode.getFilename()+" "+nnode.getHash());
 		for(int i=0;i<table.getNodes();i++)
 		{
-			System.out.println("name:"+table.getTable().get(i).getFilename() +" hash:"+table.getTable().get(i).getHash());
-		
+			//System.out.println("name:"+table.getTable().get(i).getFilename() +" hash:"+table.getTable().get(i).getHash());
+			log.info(table.getTable().get(i).getFilename()+"-"+table.getTable().get(i).getHash());
 		}
 	
 	}
