@@ -46,9 +46,11 @@ public class blockChainServiceImpl implements blockChainService {
 		Table one = buildWeb3j(blockIp);
 		
 		one.updateNodesbackuptable(filename, hash.getHash(),new BigInteger(hash.getVersion()+"")).send();
+		log.info("hash:"+hash.getHash()+"----------blockhash:"+getNodebackupTable(filename).getHash());
+		
 		if(getNodebackupTable(filename).getHash().equalsIgnoreCase(hash.getHash())) 
 		{
-			//log.info("更新 "+filename+" 在线表的哈希");
+			log.info("更新 "+filename+" 在线表的哈希");
 			return true;
 		}
 		else 
@@ -166,7 +168,7 @@ public class blockChainServiceImpl implements blockChainService {
 		else 
 		{
 			//log.info("更新在线节点表失败");
-			return true;
+			return false;
 		}
 		
 		
@@ -332,20 +334,20 @@ public class blockChainServiceImpl implements blockChainService {
 			Web3j web3 = Web3j.build(new HttpService(RPC_URL));
 			
 			table = Table.load(contractAddr, web3, credential, new DefaultGasProvider());
-			table.setGasProvider(new DefaultGasProvider() 
-			{
-				public BigInteger getGasPrice(String coutractFunc) 
-				{
-					return BigInteger.valueOf(10000L);
-				}
-				
-				public BigInteger getGasLimit(String contractFunc) 
-				{
-					return BigInteger.valueOf(5000000000L);
-				}
-				
-				
-			});
+//			table.setGasProvider(new DefaultGasProvider() 
+//			{
+//				public BigInteger getGasPrice(String coutractFunc) 
+//				{
+//					return BigInteger.valueOf(10000L);
+//				}
+//				
+//				public BigInteger getGasLimit(String contractFunc) 
+//				{
+//					return BigInteger.valueOf(50000000L);
+//				}
+//				
+//				
+//			});
 			log.info("启动区块链服务");
 		
 		
@@ -357,6 +359,20 @@ public class blockChainServiceImpl implements blockChainService {
 		String RPC_URL = "http://"+ip+":"+port;
 		Web3j web3 = Web3j.build(new HttpService(RPC_URL));
 		Table one = Table.load(contractAddr, web3, credential, new DefaultGasProvider());
+//		one.setGasProvider(new DefaultGasProvider() 
+//		{
+//			public BigInteger getGasPrice(String coutractFunc) 
+//			{
+//				return BigInteger.valueOf(10000L);
+//			}
+//			
+//			public BigInteger getGasLimit(String contractFunc) 
+//			{
+//				return BigInteger.valueOf(50000000L);
+//			}
+//			
+//		});
+
 		return one;
 	}
 

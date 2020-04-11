@@ -1,9 +1,9 @@
 import org.junit.*;
 
-import Service.*;
-import ServiceImpl.IPFSFileTableServiceImpl;
-import MODEL.*;
-import MODEL.NODE.IPFSNode;
+import application.Service.*;
+import application.ServiceImpl.IPFSFileTableServiceImpl;
+import application.MODEL.*;
+import application.MODEL.NODE.IPFSNode;
 
 public class IPFSFileTableServiceTest {
 

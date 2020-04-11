@@ -41,7 +41,7 @@ public class SelfdispatchControllerImpl implements SelfdispatchController {
 	}
 
 	@Override
-	public boolean isNeeddispatch(String filehash) {
+	public boolean isNeeddispatch(String filehash) throws Exception {
 		// TODO Auto-generated method stub
 		blockChain.updateLocalNodebackTable(filehash);
 		blockChain.updateLocalTable();
@@ -66,14 +66,14 @@ public class SelfdispatchControllerImpl implements SelfdispatchController {
 			{
 				return true;
 			}
-			
+			 
 			return false;
 		}	
 		return false;
 	}
 
 	@Override
-	public void selfdiapatch(String ip) {
+	public void selfdiapatch(String ip) throws Exception {
 		// TODO Auto-generated method stub
 		
 		
@@ -95,10 +95,7 @@ public class SelfdispatchControllerImpl implements SelfdispatchController {
 					if(!localfile.isExistFile(nodefile.getFiles().get(i))) 
 					{
 						backup.selfbackup(nodefile.getFiles().get(i));
-					}
-					
-					
-					
+					}	
 					backup.noticebackup(nodefile.getFiles().get(i));
 				}
 				
@@ -131,9 +128,21 @@ public class SelfdispatchControllerImpl implements SelfdispatchController {
 				while(it.hasNext()) 
 				{
 					String filehash = it.next();
-					blockChain.updateLocalNodebackTable(filehash);
+					try 
+					{
+						blockChain.updateLocalNodebackTable(filehash);
+					}
+					catch (Exception e) 
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					IPFSFileTable itable = nodebackuptable.getIPFSFileTablebyhash(filehash);
-					backupController.backuplist.get(filehash).setNum(itable.getOnlinenum());
+					synchronized(backupController.class) 
+					{
+						backupController.backuplist.get(filehash).setNum(itable.getOnlinenum());
+					}
+					
 					
 					
 				}

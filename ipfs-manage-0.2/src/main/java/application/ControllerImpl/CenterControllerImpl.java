@@ -9,12 +9,15 @@ import application.Controller.blockChainController;
 import application.MODEL.NET.UnlineMessage;
 import application.MODEL.NODE.IPFSNode;
 import application.MODEL.NODE.MainNode;
+import application.MODEL.NODE.hashnode;
 import application.MODEL.NODE.initNode;
 import application.MODEL.TABLE.FileBackupTable;
 import application.MODEL.TABLE.IPFSFileTable;
 import application.MODEL.TABLE.MainNodeTable;
 import application.MODEL.TABLE.NamehashTable;
 import application.Service.*;
+import io.ipfs.api.IPFS.Update;
+
 import org.springframework.stereotype.Controller;
 //import jdk.internal.org.jline.utils.Log;
 import org.web3j.crypto.CipherException;
@@ -72,7 +75,7 @@ public class CenterControllerImpl implements CenterController {
 	//3.开启备份服务
 	//4.开启发送信息服务
 	//5.开启自我检查待备份列表的服务
-	public void start() throws IOException, CipherException 
+	public void start() throws Exception 
 	{
 		
 		ipfsuse.startIpfs();
@@ -83,21 +86,24 @@ public class CenterControllerImpl implements CenterController {
 			InetAddress ip = InetAddress.getLocalHost();
 			
 			
+			hashnode newone = new hashnode();
 			//更新在线节点表
 			do 
 			{
-				blockChain.updateLocalTable();
-				
+				//blockChain.updateLocalTable();
+				hashnode online = blockChain.updateLocalOnlinenodeTable();
 				onlineTable.InsertIp(ip.getHostAddress());
 				hash = ipfs.UploadFile(ipfs.getTableaddr()+onlineTable.getTABLE());	
-			}while(!blockChain.updateOnlinenodeTable(hash));
+				newone.setHash(hash);
+				newone.setVersion(online.getVersion());
+				
+			}while(!blockChain.updateOnlinenodeTable(newone));
 			
-			blockChain.updateLocalNodefileTable(ip.getHostAddress());
 			
 			
 			
 			//更新该节点所备份的所有节点有关该节点的在线情况
-			
+			blockChain.updateLocalNodefileTable(ip.getHostAddress());
 			FileBackupTable nodetable = nodefiletable.getTable(ip.getHostAddress());
 			
 			IPFSNode inode = new IPFSNode();
@@ -107,20 +113,16 @@ public class CenterControllerImpl implements CenterController {
 			for(int i=0;i<nodetable.getNum();i++) 
 			{
 				String filehash = nodetable.getFiles().get(i),updatehash ;
-				
+				hashnode ha = new hashnode();
 				do 
-				{
-					
-					blockChain.updateLocalNodebackTable(filehash);
-					
-					fileonlinetable.updateNode(inode,filehash);
+				{					
+					hashnode nodeback = blockChain.updateLocalNodebackTable(filehash);					
+					fileonlinetable.InsertNode(inode,filehash);
 					updatehash = ipfs.UploadFile(ipfs.getTableaddr()+nodefiletable.getTABLE(ip.getHostAddress()));
+					ha.setHash(updatehash);
+					ha.setVersion(nodeback.getVersion());
 					
-					
-					
-					
-					
-				}while(!blockChain.updateNodebackTable(filehash, updatehash));
+				}while(!blockChain.updateNodebackTable(filehash, ha));
 				
 			}
 
@@ -156,7 +158,7 @@ public class CenterControllerImpl implements CenterController {
 	//4.关闭备份服务
 	//5.关闭检查待备份列表服务
 	//6.发送一个下线广播
-	public void exit()
+	public void exit() throws Exception
 	{
 		try {
 			//String hash;
@@ -166,16 +168,17 @@ public class CenterControllerImpl implements CenterController {
 			
 			
 			log.info("正在准备关闭中心控制器···");
-			
+			hashnode newone = new hashnode();
 			//更新在线节点表，将该地址从在线节点表中删除
 			do
 			{
-				blockChain.updateLocalTable();
+				hashnode online = blockChain.updateLocalOnlinenodeTable();
 				onlineTable.deleteIp(ip.getHostAddress());
 				newhash = ipfs.UploadFile(ipfs.getTableaddr()+onlineTable.getTABLE());
-				
+				newone.setHash(newhash);
+				newone.setVersion(online.getVersion());
 				log.info("正在尝试更新在线节点表...");
-			}while(!blockChain.updateOnlinenodeTable(newhash));
+			}while(!blockChain.updateOnlinenodeTable(newone));
 			log.info("更新在线节点表成功");
 			
 			//RecieveThread.interrupt();
@@ -193,15 +196,16 @@ public class CenterControllerImpl implements CenterController {
 			for(int i=0;i<nodetable.getNum();i++) 
 			{
 				String filehash = nodetable.getFiles().get(i),updatehash ;
-				
+				hashnode ha = new hashnode();
 				do 
 				{
 					
-					blockChain.updateLocalNodebackTable(filehash);			
+					hashnode nodeback = blockChain.updateLocalNodebackTable(filehash);			
 					fileonlinetable.updateNode(inode,filehash);
 					updatehash = ipfs.UploadFile(ipfs.getTableaddr()+nodefiletable.getTABLE(ip.getHostAddress()));
-					
-				}while(!blockChain.updateNodebackTable(filehash, updatehash));
+					ha.setHash(updatehash);
+					ha.setVersion(nodeback.getVersion());
+				}while(!blockChain.updateNodebackTable(filehash, ha));
 				
 			}
 			
@@ -230,14 +234,14 @@ public class CenterControllerImpl implements CenterController {
 
 
 	
-	public void downloadFile(String hash) 
+	public void downloadFile(String hash) throws Exception 
 	{
 		ipfsuse.download(hash);
 	}
 
 
 	@Override
-	public void uploadFile(String addr, String file) {
+	public void uploadFile(String addr, String file) throws Exception {
 		// TODO Auto-generated method stub
 	
 		ipfsuse.upload(addr, file);
@@ -248,14 +252,14 @@ public class CenterControllerImpl implements CenterController {
 		return service;
 	}
 
-	public NamehashTable getFileHashInfo() 
+	public NamehashTable getFileHashInfo() throws Exception 
 	{
 		blockChain.updateLocalTable();
 		return namehash.getTable();
 		
 	}
 	
-	public IPFSFileTable getFileonlinebackupInfo(String filehash) 
+	public IPFSFileTable getFileonlinebackupInfo(String filehash) throws Exception 
 	{
 		blockChain.updateLocalNodebackTable(filehash);
 		return fileonlinetable.getIPFSFileTablebyhash(filehash);

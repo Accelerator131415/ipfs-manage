@@ -1,9 +1,9 @@
 import org.junit.*;
 
-import MODEL.NODE.MainNode;
-import MODEL.TABLE.MainNodeTable;
-import Service.MainNodeTableService;
-import ServiceImpl.MainNodeTableServiceImpl;
+import application.MODEL.NODE.MainNode;
+import application.MODEL.TABLE.MainNodeTable;
+import application.Service.MainNodeTableService;
+import application.ServiceImpl.MainNodeTableServiceImpl;
 
 public class MainNodeTableServiceTest {
 

@@ -2,23 +2,18 @@ package application.ControllerImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.logging.Logger;
-
 import javax.annotation.Resource;
-
 import org.springframework.stereotype.Controller;
 import org.web3j.crypto.CipherException;
-
 import application.Controller.blockChainController;
 import application.MODEL.NODE.hashnode;
 import application.MODEL.NODE.initNode;
 import application.MODEL.TABLE.OnlineNodeTable;
 import application.Service.*;
-import application.blockChain.Table;
+
 
 @Controller("blockChainController")
 public class blockChainControllerImpl implements blockChainController {
@@ -108,13 +103,11 @@ public class blockChainControllerImpl implements blockChainController {
 		// TODO Auto-generated method stub
 		hashnode hash = blockChain.getMainnodeTable();
 		ipfs.DownloadTable(hash.getHash(), mainnodetable.getTABLE());
-		
 		return hash;
 	}
 	@Override
 	public hashnode updateLocalNamehashTable() throws Exception {
 		// TODO Auto-generated method stub
-		
 		hashnode hash = blockChain.getFilehashTable();
 		ipfs.DownloadTable(hash.getHash(), namehashtable.getTABLE());
 		return hash;
@@ -123,8 +116,7 @@ public class blockChainControllerImpl implements blockChainController {
 	public hashnode updateLocalOnlinenodeTable() throws Exception {
 		// TODO Auto-generated method stub
 		hashnode hash = blockChain.getOnlineTable();
-		ipfs.DownloadFile(hash.getHash(), onlinetable.getTABLE());
-		
+		ipfs.DownloadTable(hash.getHash(), onlinetable.getTABLE());
 		return hash;
 	}	
 	@Override
@@ -168,9 +160,9 @@ public class blockChainControllerImpl implements blockChainController {
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							//e.printStackTrace();
-						} catch (Exception e) {
+						}catch (Exception e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							//e.printStackTrace();
 						}				
 					}
 				}})).start();
@@ -253,6 +245,7 @@ public class blockChainControllerImpl implements blockChainController {
 		
 		return NamehashSucess;
 	}
+	
 	@Override
 	public boolean updateOnlinenodeTable(hashnode hash) throws InterruptedException
 	{
@@ -294,7 +287,7 @@ public class blockChainControllerImpl implements blockChainController {
 						
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							//e.printStackTrace();
 						}
 					}
 					
@@ -398,7 +391,7 @@ public class blockChainControllerImpl implements blockChainController {
 				public void run() {
 					// TODO Auto-generated method stub
 					int num = r.nextInt(online.getNum())%online.getNum();
-					if(isNodebackupSend(online.getOnlineNodes().get(num))) 
+					if(!isNodebackupSend(online.getOnlineNodes().get(num))) 
 					{
 						NodebackuphadSend.add(online.getOnlineNodes().get(num));
 						boolean sucess;
@@ -413,7 +406,7 @@ public class blockChainControllerImpl implements blockChainController {
 							NodebackupLock = true;
 							
 							NodebackupSucess = sucess;
-							
+							//log.info("??????????????????????:"+NodebackupSucess);
 							NodebackupSend = false;
 							
 						} catch (Exception e) {
@@ -432,7 +425,7 @@ public class blockChainControllerImpl implements blockChainController {
 			NodebackupThreads.get(i).interrupt();
 		}
 		
-		return false;
+		return NodebackupSucess;
 	}
 
 	

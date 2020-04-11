@@ -40,13 +40,13 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 			if(!table.exists()) 
 			{
 				table.createNewFile();
-				log.info("成功创建表:"+TABLE);
+			//	log.info("成功创建表:"+TABLE);
 			}
 			return true;
 		}catch(Exception e) 
 		{
 			e.printStackTrace();
-			log.info("创建主节点表:"+TABLE+"失败");
+		//	log.info("创建主节点表:"+TABLE+"失败");
 		}
 		
 		return false;
@@ -60,7 +60,7 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 		{
 			if(!table.exists())
 			{
-				log.info("插入节点:"+mnode.getFilehash()+"失败，主节点表不存在");
+			//	log.info("插入节点:"+mnode.getFilehash()+"失败，主节点表不存在");
 				return false;
 			}
 			
@@ -73,14 +73,14 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 			fw.write(content);
 			fw.flush();
 			fw.close();
-			log.info("主节点表插入节点:"+mnode.getFilehash()+"成功");
+			//log.info("主节点表插入节点:"+mnode.getFilehash()+"成功");
 			
 			return true;
 		}catch(IOException e)
 		{
 			
 			e.printStackTrace();
-			log.info("主节点表插入节点:"+mnode.getFilehash()+"失败");
+			//log.info("主节点表插入节点:"+mnode.getFilehash()+"失败");
 		}
 
 		return false;
@@ -98,13 +98,13 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 			if(!new File(addr+TABLE).exists()) 
 			{
 				
-				log.info("主节点表更新节点:"+mnode.getFilehash()+"失败，原因：目标表不存在");
+				//log.info("主节点表更新节点:"+mnode.getFilehash()+"失败，原因：目标表不存在");
 				return false;
 			}
 			
 			if(!isExistNode(mnode)) 
 			{
-				log.info("主节点表更新节点:"+mnode.getFilehash()+"失败，原因：表中目标节点不存在");
+				//log.info("主节点表更新节点:"+mnode.getFilehash()+"失败，原因：表中目标节点不存在");
 				return false;
 			}
 			
@@ -125,7 +125,7 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 							end = i;
 						}
 					}
-					buf.replace(start+1, end-1, mnode.getFilehash());				
+					buf.replace(start+1, end, mnode.getFilehash());				
 				}
 				
 				buf.append(System.getProperty("line.separator"));
@@ -135,12 +135,12 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 			fw.write(bufall.toString());
 			fw.flush();
 			fw.close();
-			log.info("主节点表更新节点:"+mnode.getFilehash()+"成功");
+			//log.info("主节点表更新节点:"+mnode.getFilehash()+"成功");
 			return true;
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("主节点表更新节点:"+mnode.getFilehash()+"失败");
+		//	log.info("主节点表更新节点:"+mnode.getFilehash()+"失败");
 		}finally 
 		{
 			try {
@@ -165,7 +165,7 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 			{
 				if(line.startsWith(mnode.getFilehash())) 
 				{
-					log.info("主节点表中节点:"+mnode.getFilehash()+"存在");
+				//	log.info("主节点表中节点:"+mnode.getFilehash()+"存在");
 					return true;
 				}
 				
@@ -175,7 +175,7 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("读取主节点表失败");
+			//log.info("读取主节点表失败");
 		}finally 
 		{
 			try {
@@ -186,7 +186,7 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 			}
 		}
 		
-		log.info("主节点表中节点:"+mnode.getFilehash()+"不存在");
+		//log.info("主节点表中节点:"+mnode.getFilehash()+"不存在");
 		return false;
 	}
 	
@@ -217,8 +217,8 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 						}
 					}
 					
-					mnode.setMainIp((line.substring(start+1,end-1)));
-					log.info("主节点表获取节点:"+filehash+"信息成功");
+					mnode.setMainIp((line.substring(start+1,end)));
+				//	log.info("主节点表获取节点:"+filehash+"信息成功");
 					return mnode;
 				}
 			}
@@ -227,7 +227,7 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("主节点获取节点："+filehash+"的信息失败");
+			//log.info("主节点获取节点："+filehash+"的信息失败");
 		}finally 
 		{
 			try {
@@ -269,21 +269,21 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 				}	
 				
 				MainNode mnode = new MainNode();
-				mnode.setFilehash(line.substring(0, middle-1));
-				mnode.setMainIp(line.substring(middle+1, end-1));
+				mnode.setFilehash(line.substring(0, middle));
+				mnode.setMainIp(line.substring(middle+1, end));
 				list.add(mnode);
 				num++;
 			}
 			
 			mtable.setTable(list);
 			mtable.setNum(num);
-			log.info("获取主节点表成功");
+			//log.info("获取主节点表成功");
 			return mtable;
 			
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("获取主节点表失败，失败原因：读取目标文件失败");
+			//log.info("获取主节点表失败，失败原因：读取目标文件失败");
 		}finally 
 		{
 			try {
@@ -327,20 +327,20 @@ public class MainNodeTableServiceImpl implements MainNodeTableService {
 				}
 				
 				//mnode.setMainIp((line.substring(start+1,end)));
-				mnode.setFilehash(line.substring(0,start-1));
+				mnode.setFilehash(line.substring(0,start));
 				list.add(mnode);
 				
 				
 			}
 			
-			log.info("主节点表获取节点:"+ip+"的主节点信息成功");
+			//log.info("主节点表获取节点:"+ip+"的主节点信息成功");
 			return list;
 			
 			
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("主节点获取节点："+ip+"的信息失败");
+			//log.info("主节点获取节点："+ip+"的信息失败");
 		}finally 
 		{
 			try {

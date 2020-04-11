@@ -6,7 +6,7 @@ import application.MODEL.NODE.initNode;
 
 public interface initService {
 
-	public static String defaultAddr = "C:\\Users\\Administrator\\.selfDispathch\\";
+	public static String defaultAddr = "C:\\Users\\Administrator\\.selfDispatch\\";
 	
 	public boolean isInit();
 	

@@ -40,11 +40,11 @@ public class OnlineNodeTableServiceImpl implements OnlineNodeTableService {
 			try
 			{
 				table.createNewFile();
-				log.info("创建在线节点表成功");
+			//	log.info("创建在线节点表成功");
 				return true;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				log.info("创建在线节点表失败，原因：文件操作异常");
+		//		log.info("创建在线节点表失败，原因：文件操作异常");
 				e.printStackTrace();
 				
 			}
@@ -61,7 +61,7 @@ public class OnlineNodeTableServiceImpl implements OnlineNodeTableService {
 			File table = new File(addr+TABLE);
 			if(!table.exists()) 
 			{
-				log.info("插入新节点：\""+ip+"\"失败，原因：目标表不存在");
+		//		log.info("插入新节点：\""+ip+"\"失败，原因：目标表不存在");
 				return false;
 			}
 			if(isExistIp(ip)) 
@@ -75,7 +75,7 @@ public class OnlineNodeTableServiceImpl implements OnlineNodeTableService {
 			return true;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			log.info("插入新节点:\""+ip+"\"失败，原因:文件操作异常");
+		//	log.info("插入新节点:\""+ip+"\"失败，原因:文件操作异常");
 			e.printStackTrace();
 		}
 		return false;
@@ -97,14 +97,14 @@ public class OnlineNodeTableServiceImpl implements OnlineNodeTableService {
 			{
 				if(line.equalsIgnoreCase(ip)) 
 				{
-					log.info("节点:\""+ip+"\"存在在线节点表中");
+			//		log.info("节点:\""+ip+"\"存在在线节点表中");
 					return true;
 				}
 			}
 			
 		}catch(Exception e) 
 		{
-			log.info("检查节点:"+ip+"失败，原因：文件操作异常");
+		//	log.info("检查节点:"+ip+"失败，原因：文件操作异常");
 			e.printStackTrace();
 		}finally 
 		{
@@ -115,7 +115,7 @@ public class OnlineNodeTableServiceImpl implements OnlineNodeTableService {
 				e.printStackTrace();
 			}
 		}
-		log.info("节点:\""+ip+"\"不在在线节点表中");
+	//	log.info("节点:\""+ip+"\"不在在线节点表中");
 		return false;
 	}
 	
@@ -142,12 +142,12 @@ public class OnlineNodeTableServiceImpl implements OnlineNodeTableService {
 			fw = new FileWriter(new File(addr+TABLE),false);
 			fw.write(bufall.toString());
 						
-			log.info("删除节点:\""+ip+"\"成功");
+		//	log.info("删除节点:\""+ip+"\"成功");
 			return true;
 		}
 		catch(Exception e) 
 		{
-			log.info("删除节点:\""+ip+"\"失败，原因：文件操作异常");
+		//	log.info("删除节点:\""+ip+"\"失败，原因：文件操作异常");
 			e.printStackTrace();
 		}
 		finally 
@@ -183,11 +183,11 @@ public class OnlineNodeTableServiceImpl implements OnlineNodeTableService {
 			
 			table.setOnlineNodes(nodes);
 			table.setNum(nodes.size());
-			log.info("获取在线节点表成功");
+		//	log.info("获取在线节点表成功");
 			return table;
 		}catch(Exception e) 
 		{
-			log.info("获取在线节点表失败，原因：文件操作异常");
+		//	log.info("获取在线节点表失败，原因：文件操作异常");
 			e.printStackTrace();
 		}finally
 		{
@@ -199,7 +199,7 @@ public class OnlineNodeTableServiceImpl implements OnlineNodeTableService {
 			}
 		}
 		
-		log.info("获取在线节点表失败，原因：未知");
+		//log.info("获取在线节点表失败，原因：未知");
 		return table;
 		
 		

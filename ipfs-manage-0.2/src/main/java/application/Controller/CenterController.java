@@ -11,20 +11,20 @@ import application.MODEL.TABLE.NamehashTable;
 public interface CenterController {
 
 	
-	public void start() throws IOException, CipherException;
+	public void start() throws IOException, CipherException, Exception;
 	
-	public void uploadFile(String addr,String file);
+	public void uploadFile(String addr,String file) throws Exception;
 	
-	public void downloadFile(String hash);
+	public void downloadFile(String hash) throws Exception;
 		
-	public void exit();
+	public void exit() throws Exception;
 
 
 	public boolean isService();
 	
-	public NamehashTable getFileHashInfo();
+	public NamehashTable getFileHashInfo() throws Exception;
 	
-	public IPFSFileTable getFileonlinebackupInfo(String filehash);
+	public IPFSFileTable getFileonlinebackupInfo(String filehash) throws Exception;
 
 	public initNode readInitInfo() throws IOException;
 	

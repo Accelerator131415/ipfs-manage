@@ -1,7 +1,7 @@
 import org.junit.*;
 
-import Service.OnlineNodeTableService;
-import ServiceImpl.OnlineNodeTableServiceImpl;
+import application.Service.OnlineNodeTableService;
+import application.ServiceImpl.OnlineNodeTableServiceImpl;
 
 
 public class OnlineNodeTableServiceTest {

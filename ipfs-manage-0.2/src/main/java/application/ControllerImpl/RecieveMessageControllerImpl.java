@@ -54,25 +54,25 @@ public class RecieveMessageControllerImpl implements RecieveMessageController {
 		service = false;
 	}
 	
-	public synchronized void addMessage(Message message) 
-	{
-		messages.add(message);
-	}
-	
-	public synchronized Message removeMessage(int location) 
-	{
-		return messages.remove(location);
-	}
-
-	public synchronized void addUnlineMessage(UnlineMessage unlinemessage) 
-	{
-		unlinemessages.add(unlinemessage);
-	}
-	
-	public synchronized UnlineMessage removeUnlinemessage(int location) 
-	{
-		return unlinemessages.remove(location);
-	}
+//	public synchronized void addMessage(Message message) 
+//	{
+//		messages.add(message);
+//	}
+//	
+//	public synchronized Message removeMessage(int location) 
+//	{
+//		return messages.remove(location);
+//	}
+//
+//	public synchronized void addUnlineMessage(UnlineMessage unlinemessage) 
+//	{
+//		unlinemessages.add(unlinemessage);
+//	}
+//	
+//	public synchronized UnlineMessage removeUnlinemessage(int location) 
+//	{
+//		return unlinemessages.remove(location);
+//	}
 
 	@Override
 	public void run() {
@@ -91,17 +91,14 @@ public class RecieveMessageControllerImpl implements RecieveMessageController {
 			{
 				while(!messages.isEmpty()) 
 				{
-					Message one = removeMessage(0);
+					Message one = RecieveMessageController.removeMessage(0);
 					
 					if(one.isBackup()) 
 					{
 						if(backupController.backuplist.containsKey(one.getFilehash())) 
 						{
-							
 							blockChain.updateLocalNodebackTable(one.getFilehash());
-							IPFSFileTable node_filetable = file_node.getIPFSFileTablebyhash(one.getFilehash());
-							
-							
+							IPFSFileTable node_filetable = file_node.getIPFSFileTablebyhash(one.getFilehash());							
 							backupController.backuplist.get(one.getFilehash()).setNum(node_filetable.getOnlinenum());
 						}		
 					}
@@ -138,6 +135,9 @@ public class RecieveMessageControllerImpl implements RecieveMessageController {
 				}
 			}			
 		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

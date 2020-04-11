@@ -16,12 +16,39 @@ public interface RecieveMessageController extends Runnable{
 	public void close();
 	
 	
-	public void addMessage(Message message);
+	public static void addMessage(Message message) 
+	{
+		synchronized(RecieveMessageController.class) 
+		{
+			messages.add(message);
+		}
+	}
 	
-	public Message removeMessage(int location);
 	
-	public void addUnlineMessage(UnlineMessage unlinemessage);
+	public static Message removeMessage(int location) 
+	{
+		synchronized(RecieveMessageController.class) 
+		{
+			return messages.remove(location);
+		}
+		
+	}
 	
-	public UnlineMessage removeUnlinemessage(int location);
+	public static void addUnlineMessage(UnlineMessage unlinemessage) 
+	{
+		synchronized(RecieveMessageController.class) 
+		{
+			unlinemessages.add(unlinemessage);
+		}
+		
+	}
+	
+	public static UnlineMessage removeUnlinemessage(int location) 
+	{
+		synchronized(RecieveMessageController.class) 
+		{
+			return unlinemessages.remove(location);
+		}
+	}
 	
 }

@@ -43,13 +43,13 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 			if(!table.exists()) 
 			{
 				table.createNewFile();
-				log.info("成功创建表:"+TABLE);
+	//			log.info("成功创建表:"+TABLE);
 			}
 			return true;
 		}catch(Exception e) 
 		{
 			e.printStackTrace();
-			log.info("创建文件名-哈希表:"+TABLE+"失败");
+	//		log.info("创建文件名-哈希表:"+TABLE+"失败");
 		}
 		
 		return false;
@@ -64,7 +64,7 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 			
 			if(!table.exists())
 			{
-				log.info("插入节点:"+nnode.getFilename()+"失败，文件名-哈希表不存在");
+		//		log.info("插入节点:"+nnode.getFilename()+"失败，文件名-哈希表不存在");
 				return false;
 			}
 			
@@ -77,14 +77,14 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 			fw.write(content);
 			fw.flush();
 			fw.close();
-			log.info("文件名-哈希表插入节点:"+nnode.getHash()+"成功");
+	//		log.info("文件名-哈希表插入节点:"+nnode.getHash()+"成功");
 			
 			return true;
 		}catch(IOException e)
 		{
 			
 			e.printStackTrace();
-			log.info("文件名-哈希表插入节点:"+nnode.getHash()+"失败");
+	//		log.info("文件名-哈希表插入节点:"+nnode.getHash()+"失败");
 		}
 
 		return false;
@@ -103,13 +103,13 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 			if(!new File(addr+TABLE).exists()) 
 			{
 				
-				log.info("文件名-哈希表更新节点:"+nnode.getHash()+"失败，原因：目标表不存在");
+			//	log.info("文件名-哈希表更新节点:"+nnode.getHash()+"失败，原因：目标表不存在");
 				return false;
 			}
 			
 			if(!isExistNode(nnode)) 
 			{
-				log.info("文件名-哈希表更新节点:"+nnode.getHash()+"失败，原因：表中目标节点不存在");
+		//		log.info("文件名-哈希表更新节点:"+nnode.getHash()+"失败，原因：表中目标节点不存在");
 				return false;
 			}
 			
@@ -140,12 +140,12 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 			fw.write(bufall.toString());
 			fw.flush();
 			fw.close();
-			log.info("文件名-哈希表更新节点:"+nnode.getHash()+"成功");
+		//	log.info("文件名-哈希表更新节点:"+nnode.getHash()+"成功");
 			return true;
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("文件名-哈希表更新节点:"+nnode.getHash()+"失败");
+		//	log.info("文件名-哈希表更新节点:"+nnode.getHash()+"失败");
 		}finally 
 		{
 			try {
@@ -170,7 +170,7 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 			{
 				if(line.startsWith(nnode.getHash())) 
 				{
-					log.info("文件名-哈希表中节点:"+nnode.getHash()+"存在");
+			//		log.info("文件名-哈希表中节点:"+nnode.getHash()+"存在");
 					return true;
 				}
 				
@@ -180,7 +180,7 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("读取文件名-哈希表失败");
+	//		log.info("读取文件名-哈希表失败");
 		}finally 
 		{
 			try {
@@ -191,7 +191,7 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 			}
 		}
 		
-		log.info("文件名-哈希表中节点:"+nnode.getHash()+"不存在");
+	//	log.info("文件名-哈希表中节点:"+nnode.getHash()+"不存在");
 		return false;
 	}
 	
@@ -223,7 +223,7 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 					}
 					
 					nnode.setHash(line.substring(start+1,end));
-					log.info("文件名-哈希表获取节点:"+name+"信息成功");
+			//		log.info("文件名-哈希表获取节点:"+name+"信息成功");
 					return nnode;
 				}
 			}
@@ -232,7 +232,7 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("文件名-哈希表获取节点："+name+"的信息失败");
+		//	log.info("文件名-哈希表获取节点："+name+"的信息失败");
 		}finally 
 		{
 			try {
@@ -275,8 +275,8 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 						}
 					}
 					
-					nnode.setFilename(line.substring(start+1,end-1));
-					log.info("文件名-哈希表获取节点:"+hash+"信息成功");
+					nnode.setFilename(line.substring(start+1,end));
+				//	log.info("文件名-哈希表获取节点:"+hash+"信息成功");
 					return nnode;
 				}
 			}
@@ -286,7 +286,7 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("文件名-哈希表获取节点："+hash+"的信息失败");
+		//	log.info("文件名-哈希表获取节点："+hash+"的信息失败");
 		}finally 
 		{
 			try {
@@ -329,21 +329,21 @@ public class NameHashTableServiceImpl implements NameHashTableService{
 				}	
 				
 				NameHashNode nnode = new NameHashNode();
-				nnode.setHash(line.substring(0, middle-1));
-				nnode.setFilename(line.substring(middle+1, end-1));
+				nnode.setHash(line.substring(0, middle));
+				nnode.setFilename(line.substring(middle+1, end));
 				list.add(nnode);
 				num++;
 			}
 			
 			ntable.setTable(list);
 			ntable.setNodes(num);
-			log.info("获取文件名-哈希表成功");
+			//log.info("获取文件名-哈希表成功");
 			return ntable;
 			
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("获取文件名-哈希表失败，失败原因：读取目标文件失败");
+			//log.info("获取文件名-哈希表失败，失败原因：读取目标文件失败");
 		}finally 
 		{
 			try {

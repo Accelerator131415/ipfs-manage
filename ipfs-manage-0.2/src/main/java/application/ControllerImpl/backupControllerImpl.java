@@ -21,6 +21,7 @@ import application.Controller.blockChainController;
 import application.MODEL.NODE.IPFSNode;
 import application.MODEL.NODE.MainNode;
 import application.MODEL.NODE.backupNode;
+import application.MODEL.NODE.hashnode;
 import application.MODEL.TABLE.*;
 import application.Service.FileBackupTableService;
 import application.Service.IPFSFileTableService;
@@ -59,8 +60,7 @@ public class backupControllerImpl implements backupController {
 	//@Resource(name = "SendMessageController")
 	//SendMessageController sendService;
 	
-	
-	public void noticebackup(String filehash)	
+	public void noticebackup(String filehash) throws Exception	
 	{
 		//OnlineNodeTable online = onlinetable.getTable();
 		List<String> files = ipfs.getSonfile(filehash);
@@ -81,15 +81,15 @@ public class backupControllerImpl implements backupController {
 	}
 
 	//接受到通知，自己备份这个文件
-	public boolean selfbackup(String filehash) 
+	public boolean selfbackup(String filehash) throws Exception 
 	{
 		blockChain.updateLocalNodebackTable(filehash);
 		IPFSFileTable itable = nodebackuptable.getIPFSFileTablebyhash(filehash);
+		
 		if(itable.getOnlinenum()>=limit) 
 		{
 			log.info("文件备份数已足够，不需要再进行备份");
-			return true;
-			
+			return true;			
 		}
 		
 		
@@ -103,16 +103,17 @@ public class backupControllerImpl implements backupController {
 		log.info("正在备份:"+filehash+"文件");
 		try {
 			ip = InetAddress.getLocalHost();
-			inode.setIp(ip.getHostAddress());
-			inode.setOnline(true);
+			
 			String hash;
 			String mainnodehash; 
 			
 			//检查是否更新主节点；
-			
+			hashnode update = new hashnode();
 			do 
 			{
-				blockChain.updateLocalTable();
+				//blockChain.updateLocalTable();
+				hashnode main = blockChain.updateLocalMainnodeTable();
+				blockChain.updateLocalOnlinenodeTable();
 				MainNodeTable mainnode = mainnodetable.getTable();
 				OnlineNodeTable onlinenode = onlinetable.getTable();
 				
@@ -127,36 +128,45 @@ public class backupControllerImpl implements backupController {
 				MainNode mnode = new MainNode();
 				mnode.setFilehash(filehash);
 				mnode.setMainIp(ip.getHostAddress());
-				mainnodetable.updateNode(mnode);
+				mainnodetable.InsertNode(mnode);
 				mainnodehash = ipfs.UploadFile(ipfs.getTableaddr()+mainnodetable.getTABLE());
 				
+				update.setHash(mainnodehash);
+				update.setVersion(main.getVersion());
 				
 				
-				
-			}while(!blockChain.updateMainnodeTable(mainnodehash));
+			}while(!blockChain.updateMainnodeTable(update));
 			
-			
+			update = new hashnode();
+			inode.setIp(ip.getHostAddress());
+			inode.setOnline(true);
 			//更新文件的备份节点表
 			do 
 			{
-				blockChain.updateLocalNodebackTable(filehash);;
+				blockChain.updateLocalOnlinenodeTable();
+				hashnode nodebackup = blockChain.updateLocalNodebackTable(filehash);
 				nodebackuptable.InsertNode(inode, filehash);
 				hash = ipfs.UploadFile(ipfs.getTableaddr()+nodebackuptable.getTABLE(filehash));
+				update.setHash(hash);
+				update.setVersion(nodebackup.getVersion());				
 				log.info("正在尝试更新"+filehash+".table");
 			}
-			while(!blockChain.updateNodebackTable(filehash, hash));
+			while(!blockChain.updateNodebackTable(filehash,update));
 			log.info("更新"+filehash+".table成功");
 			
+			update = new hashnode();
 			//更新本地备份文件表
 			do 
 			{
-				blockChain.updateLocalNodefileTable(ip.getHostAddress());
+				hashnode nodefile = blockChain.updateLocalNodefileTable(ip.getHostAddress());
 				nodefiletable.InsertFile(filehash);
 				hash = ipfs.UploadFile(ipfs.getTableaddr()+nodefiletable.getTABLE(ip.getHostAddress()));
+				update.setHash(hash);
+				update.setVersion(nodefile.getVersion());
 				log.info("正在尝试更新"+ip.getHostAddress()+".table");
-			}while(!blockChain.updateNodefileTable(ip.getHostAddress(), hash));
-			log.info("更新"+ip.getHostAddress()+".table成功");
+			}while(!blockChain.updateNodefileTable(ip.getHostAddress(), update));
 			
+			log.info("更新"+ip.getHostAddress()+".table成功");			
 			log.info("已成功备份:"+filehash+"文件");
 			return true;
 			
@@ -164,8 +174,7 @@ public class backupControllerImpl implements backupController {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			log.info("备份："+filehash+"文件失败，原因：没有找到主机IP");
-			e.printStackTrace();
-			
+			e.printStackTrace();			
 			return false;
 		}
 		
@@ -207,8 +216,8 @@ public class backupControllerImpl implements backupController {
 					//当备份数量达到要求时，删除链表里该节点的信息，并且为其选出主节点
 					if(backuplist.get(filehash).getNum()>=limit) 
 					{
-						removeBackupNode(filehash);
-						randomselectMain(filehash);
+						backupController.removeBackupNode(filehash);
+						//randomselectMain(filehash);
 					}
 					
 				}
@@ -228,18 +237,18 @@ public class backupControllerImpl implements backupController {
 		
 	}
 
-	@Override
-	public synchronized backupNode removeBackupNode(String filehash) {
-		// TODO Auto-generated method stub
-		return backuplist.remove(filehash);
-	}
+//	@Override
+//	public synchronized backupNode removeBackupNode(String filehash) {
+//		// TODO Auto-generated method stub
+//		return backuplist.remove(filehash);
+//	}
 
 	@Override
-	public void randomselectMain(String filehash) {
+	public void randomselectMain(String filehash) throws InterruptedException, Exception {
 		// TODO Auto-generated method stub
 		
 		blockChain.updateLocalTable();
-		blockChain.updateLocalNodebackTable(filehash);
+		hashnode nodeback = blockChain.updateLocalNodebackTable(filehash);
 		IPFSFileTable nodebackup = nodebackuptable.getIPFSFileTablebyhash(filehash);
 		MainNodeTable mtable =mainnodetable.getTable();
 		MainNode existNode = mtable.getNodebyhash(filehash);
@@ -269,9 +278,12 @@ public class backupControllerImpl implements backupController {
 		mnode.setFilehash(filehash);
 		mnode.setMainIp(inode.getIp());
 		
+		hashnode one = new hashnode();
 		mainnodetable.InsertNode(mnode);
 		String newhash = ipfs.UploadFile(ipfs.getTableaddr()+mainnodetable.getTABLE());
-		blockChain.updateMainnodeTable(newhash);
+		one.setHash(newhash);
+		one.setVersion(nodeback.getVersion());
+		blockChain.updateMainnodeTable(one);
 		log.info("为文件："+filehash+"选取主节点成功,主节点为："+mnode.getMainIp());
 	}
 

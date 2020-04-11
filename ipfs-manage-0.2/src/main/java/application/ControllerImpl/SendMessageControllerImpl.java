@@ -53,7 +53,12 @@ public class SendMessageControllerImpl implements SendMessageController {
 		{
 			if(!backupController.backuplist.isEmpty()) 
 			{
-				blockChain.updateLocalTable();
+				try {
+					blockChain.updateLocalTable();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block  
+					e1.printStackTrace();
+				}
 				
 				OnlineNodeTable table = onlinetable.getTable();
 				boolean issend;
@@ -70,7 +75,12 @@ public class SendMessageControllerImpl implements SendMessageController {
 				while(it.hasNext()) 
 				{
 					String filehash = it.next();
-					blockChain.updateLocalNodebackTable(filehash);
+					try {
+						blockChain.updateLocalNodebackTable(filehash);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					IPFSFileTable nodebackup = nodebackuptable.getIPFSFileTablebyhash(filehash);
 					
 					one.setFilehash(filehash);

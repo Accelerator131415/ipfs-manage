@@ -38,9 +38,12 @@ public class MainNodeTable {
 			}
 		}
 		
+		MainNode one = new MainNode();
+		one.setFilehash("");
+		one.setMainIp("");
 		
 		log.info("主节点表中不存在节点：\""+hash+"\"s");
-		return null;
+		return one;
 	}
 	
 	//根据IP地址获取主节点信息，返回的是一个链表，一个IP可以当做多个文件的主节点

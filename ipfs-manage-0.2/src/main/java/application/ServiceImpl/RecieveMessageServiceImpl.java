@@ -107,6 +107,7 @@ public class RecieveMessageServiceImpl implements RecieveMessageService {
  	
  	public void closeService() 
  	{
+ 		ds.close();
  		service = false;
  	}
  	
@@ -130,7 +131,7 @@ public class RecieveMessageServiceImpl implements RecieveMessageService {
 			
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
-			log.info("接受信息服务绑定端口失败");
+		//	log.info("接受信息服务绑定端口失败");
 			e.printStackTrace();
 		}
 		

@@ -285,21 +285,30 @@ public class startJPanel extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		add(scrollPane, BorderLayout.CENTER);
 		
-		NamehashTable ntable = MainGUI.center.getFileHashInfo();
-		
-		String[] colname = new String[2];
-		colname[0] = "文件哈希值";
-		colname[1] = "文件名";
-		
-		String[][] rowdate = new String[ntable.getNodes()][2];
-		for(int i=0;i<ntable.getNodes();i++) 
-		{
-			rowdate[i][0] = ntable.getTable().get(i).getHash();
-			rowdate[i][1] = ntable.getTable().get(i).getFilename();
+		NamehashTable ntable;
+		try {
+			ntable = MainGUI.center.getFileHashInfo();
+			String[] colname = new String[2];
+			colname[0] = "文件哈希值";
+			colname[1] = "文件名";
+			
+			String[][] rowdate = new String[ntable.getNodes()][2];
+			for(int i=0;i<ntable.getNodes();i++) 
+			{
+				rowdate[i][0] = ntable.getTable().get(i).getHash();
+				rowdate[i][1] = ntable.getTable().get(i).getFilename();
+			}
+			table = new JTable(rowdate,colname);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			new IODialog();
+			//e1.printStackTrace();
 		}
 		
+	
 		
-		table = new JTable(rowdate,colname);
+		
+		
 		scrollPane.setViewportView(table);
 		setVisible(true);
 		repaint();
@@ -377,21 +386,29 @@ public class startJPanel extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		add(scrollPane, BorderLayout.CENTER);
 		
-		IPFSFileTable itable= MainGUI.center.getFileonlinebackupInfo(filehash);
-		
-		String[] colname = new String[2];
-		colname[0] = "节点IP";
-		colname[1] = "在线情况";
-		
-		String[][] rowdate = new String[itable.getNodes_had()][2];
-		for(int i=0;i<itable.getNodes_had();i++) 
-		{
-			rowdate[i][0] = itable.getNodes().get(i).getIp();
-			rowdate[i][1] = itable.getNodes().get(i).isOnline()+"";
+		IPFSFileTable itable;
+		try {
+			itable = MainGUI.center.getFileonlinebackupInfo(filehash);
+			String[] colname = new String[2];
+			colname[0] = "节点IP";
+			colname[1] = "在线情况";
+			
+			String[][] rowdate = new String[itable.getNodes_had()][2];
+			for(int i=0;i<itable.getNodes_had();i++) 
+			{
+				rowdate[i][0] = itable.getNodes().get(i).getIp();
+				rowdate[i][1] = itable.getNodes().get(i).isOnline()+"";
+			}
+			
+			filehashTable = new JTable(rowdate,colname);	
+			scrollPane.setViewportView(filehashTable);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			new IODialog();
 		}
 		
-		filehashTable = new JTable();
-		scrollPane.setViewportView(filehashTable);
+		
 		
 		setVisible(true);
 		repaint();

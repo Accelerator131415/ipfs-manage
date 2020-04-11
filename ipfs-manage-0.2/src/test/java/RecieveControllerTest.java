@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import application.Controller.RecieveMessageController;
+import application.Controller.backupController;
 import application.ControllerImpl.RecieveMessageControllerImpl;
 import application.MODEL.NET.Message;
 
@@ -27,7 +28,7 @@ public class RecieveControllerTest {
 		{
 			if(!RecieveMessageController.messages.isEmpty()) 
 			{
-				Message a = r.removeMessage(0);
+				Message a = RecieveMessageController.removeMessage(0);
 				log.info("senderip:"+a.getSenderIp()+",bakcupip:"+a.getBackupIp()
 						+",filehash:"+a.getFilehash());
 			}

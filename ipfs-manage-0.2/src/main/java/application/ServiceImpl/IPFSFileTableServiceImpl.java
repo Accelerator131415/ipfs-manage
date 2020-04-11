@@ -80,8 +80,8 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 			if(isExistNode(inode,filename)) 
 			{
 				//log.info("插入节点("+inode.getIp()+")已存在与表："+filename+"中");
-				updateNode(inode,filename);
-				return true;
+				return updateNode(inode,filename);
+
 			}
 			FileWriter fw = new FileWriter(table,true);
 			fw.write(content);
@@ -130,7 +130,7 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 							end = i;
 						}
 					}
-					buf.replace(start+1, end-1, ""+inode.isOnline());
+					buf.replace(start+1, end, ""+inode.isOnline());
 					
 				}
 				buf.append(System.getProperty("line.separator"));
@@ -222,8 +222,8 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 					}
 				}
 				inode = new IPFSNode();
-				inode.setIp(line.substring(0, middle-1));
-				if(line.substring(middle+1, end-1).equalsIgnoreCase("true")) 
+				inode.setIp(line.substring(0, middle));
+				if(line.substring(middle+1, end).equalsIgnoreCase("true")) 
 				{
 					inode.setOnline(true);
 				}
@@ -291,7 +291,7 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 					}	
 				}
 				
-				if(line.substring(start+1, end-1).equalsIgnoreCase("true")) 
+				if(line.substring(start+1, end).equalsIgnoreCase("true")) 
 				{
 					nums++;
 				}

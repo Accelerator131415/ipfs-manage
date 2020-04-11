@@ -53,14 +53,14 @@ public class IpfsServicesImpl implements IpfsServices {
 			List<MerkleNode> res = ipfs.add(savefile);			
 			//System.out.println(res.get(0).toJSONString());
 			
-			log.info("向IPFS上传了文件:"+addr+"\n"
-					+"返回哈希值为:"+res.get(0).hash.toString());
+//			log.info("向IPFS上传了文件:"+addr+"\n"
+//					+"返回哈希值为:"+res.get(0).hash.toString());
 			return res.get(0).hash.toString();
 		}
 		catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("向IPFS上传文件:"+addr+"失败");
+			//log.info("向IPFS上传文件:"+addr+"失败");
 		}
 				
 		
@@ -84,7 +84,8 @@ public class IpfsServicesImpl implements IpfsServices {
 			}
 			if(hash.equalsIgnoreCase("")) 
 			{
-				log.info("原文件不存在");
+				//log.info("原文件不存在");
+				
 				return;
 			}
 			
@@ -114,8 +115,8 @@ public class IpfsServicesImpl implements IpfsServices {
 			}
 			if(hash.equalsIgnoreCase("")) 
 			{
-				log.info("原表不存在，已创建新表");
-				return ;
+				//log.info("原表不存在，已创建新表");
+				return;
 			}
 			
 			Multihash filePointer = Multihash.fromBase58(hash);
@@ -129,12 +130,12 @@ public class IpfsServicesImpl implements IpfsServices {
 			fop.write(file);;
 			fop.flush();
 			fop.close();
-			log.info("从IPFS中下载了表："+filename+"\n"
-					+"文件哈希值为:"+hash);
+//			log.info("从IPFS中下载了表："+filename+"\n"
+//					+"文件哈希值为:"+hash);
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("从IPFS中下载文件："+filename+"失败");
+			//log.info("从IPFS中下载文件："+filename+"失败");
 		}
 		
 		
@@ -171,12 +172,12 @@ public class IpfsServicesImpl implements IpfsServices {
 				fop.flush();
 				fop.close();
 				//System.out.println("over:"+filebyte);
-				log.info("已备份哈希文件："+hash);
+			//	log.info("已备份哈希文件："+hash);
 			}
 		}catch(IOException e) 
 		{
 			e.printStackTrace();
-			log.info("备份哈希文件："+hash+"失败");
+			//log.info("备份哈希文件："+hash+"失败");
 		}
 			
 		
@@ -191,7 +192,7 @@ public class IpfsServicesImpl implements IpfsServices {
 		Multihash file = Multihash.fromBase58(hash);
 		List<String> filehashList = new ArrayList<String>();
 		findfile(file,filehashList);
-		log.info("调用函数获取目标hash值："+hash+"的子哈希");
+		//log.info("调用函数获取目标hash值："+hash+"的子哈希");
 		return filehashList;
 		
 		

@@ -37,33 +37,25 @@ public class IpfsControllerImpl implements IpfsController {
 	
 	//完成两个工作，通知备份
 	//更新文件名-哈希表
-	public String upload(String addr,String filename){
+	public String upload(String addr,String filename) throws Exception{
 		// TODO Auto-generated method stub
 		String hash = ipfs.UploadFile(addr+"\\"+filename);
-		InetAddress ip;
 		try {
-			ip = InetAddress.getLocalHost();
-		
-			backup.noticebackup(hash);
-			
-			
+			//InetAddress ip = InetAddress.getLocalHost();
+			backup.noticebackup(hash);			
 			//更新文件名-哈希备份表
 			NameHashNode nnode = new NameHashNode(filename,hash);
-			String namehash;
+			hashnode namehash = new hashnode();			
 			do
 			{
-				blockChain.updateLocalTable();
+				blockChain.updateLocalOnlinenodeTable();
+				hashnode name = blockChain.updateLocalNamehashTable();
 				namehashtable.InsertNode(nnode);
-				namehash = ipfs.UploadFile(ipfs.getTableaddr()+namehashtable.getTABLE());
+				String newhash = ipfs.UploadFile(ipfs.getTableaddr()+namehashtable.getTABLE());
+				namehash.setHash(newhash);
+				namehash.setVersion(name.getVersion());
 				
-			}while(blockChain.updateNamehashTable(namehash));
-			
-			
-			
-			
-			
-			
-		
+			}while(!blockChain.updateNamehashTable(namehash));		
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,7 +66,7 @@ public class IpfsControllerImpl implements IpfsController {
 		return hash;
 	}
 
-	public void download(String hash) {
+	public void download(String hash) throws Exception {
 		// TODO Auto-generated method stub
 		blockChain.updateLocalTable();
 		NameHashNode nhnode =namehashtable.getNodeByHash(hash);

@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Logger;
@@ -5,6 +6,7 @@ import java.util.logging.Logger;
 import org.junit.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.web3j.crypto.CipherException;
 
 import application.Controller.CenterController;
 import application.MODEL.NET.Message;
@@ -15,7 +17,7 @@ public class CenterControllerTest {
 
 	private Logger log = Logger.getLogger("aaa");
 	@Test
-	public void test1() 
+	public void test1() throws IOException, CipherException, Exception 
 	{
 		String xmlpath = "classpath:applicationContext.xml";
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(xmlpath);

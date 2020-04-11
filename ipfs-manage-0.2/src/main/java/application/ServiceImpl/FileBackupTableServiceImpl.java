@@ -64,12 +64,13 @@ public class FileBackupTableServiceImpl implements FileBackupTableService {
 		try 
 		{
 			String newhash = filehash +System.getProperty("line.separator");
-			File table = new File(addr+TABLE);
+			InetAddress ip = InetAddress.getLocalHost();
+			File table = new File(addr+getTABLE(ip.getHostAddress()));
 			if(!table.exists()) 
 			{
 				log.info("插入新文件:"+filehash+"失败，原因：目标表不存在");
 				return false;
-			}
+			} 
 			if(isExist(filehash)) 
 			{
 				return true;
@@ -98,7 +99,8 @@ public class FileBackupTableServiceImpl implements FileBackupTableService {
 		
 		try 
 		{
-			br = new BufferedReader(new FileReader(addr + TABLE));
+			InetAddress ip = InetAddress.getLocalHost();
+			br = new BufferedReader(new FileReader(addr +getTABLE(ip.getHostAddress())));
 			
 			while((line = br.readLine())!=null) 
 			{
