@@ -115,12 +115,16 @@ public class CenterControllerImpl implements CenterController {
 				String filehash = nodetable.getFiles().get(i) ;
 				hashnode ha = new hashnode();
 				do 
-				{					
-					hashnode nodeback = blockChain.updateLocalNodebackTable(filehash);					
+				{			
+					log.info(">>>???");
+					log.info(filehash);
+					hashnode nodeback = blockChain.updateLocalNodebackTable(filehash);		
+					log.info("是这儿？");
 					fileonlinetable.InsertNode(inode,filehash);
-					String updatehash = ipfs.UploadFile(ipfs.getTableaddr()+nodefiletable.getTABLE(ip.getHostAddress()));
+					String updatehash = ipfs.UploadFile(ipfs.getTableaddr()+fileonlinetable.getTABLE(filehash));
 					ha.setHash(updatehash);
 					ha.setVersion(nodeback.getVersion());
+					log.info("还是这儿？");
 					
 				}while(!blockChain.updateNodebackTable(filehash, ha));
 				
@@ -195,14 +199,14 @@ public class CenterControllerImpl implements CenterController {
 			
 			for(int i=0;i<nodetable.getNum();i++) 
 			{
-				String filehash = nodetable.getFiles().get(i),updatehash ;
+				String filehash = nodetable.getFiles().get(i) ;
 				hashnode ha = new hashnode();
 				do 
 				{
 					
 					hashnode nodeback = blockChain.updateLocalNodebackTable(filehash);			
 					fileonlinetable.updateNode(inode,filehash);
-					updatehash = ipfs.UploadFile(ipfs.getTableaddr()+nodefiletable.getTABLE(ip.getHostAddress()));
+					String updatehash = ipfs.UploadFile(ipfs.getTableaddr()+fileonlinetable.getTABLE(filehash));
 					ha.setHash(updatehash);
 					ha.setVersion(nodeback.getVersion());
 				}while(!blockChain.updateNodebackTable(filehash, ha));
@@ -243,8 +247,9 @@ public class CenterControllerImpl implements CenterController {
 	@Override
 	public void uploadFile(String addr, String file) throws Exception {
 		// TODO Auto-generated method stub
-	
+		log.info("上传开始");
 		ipfsuse.upload(addr, file);
+		log.info("上传结束");
 	}
 
 

@@ -1,3 +1,9 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.junit.*;
@@ -15,7 +21,7 @@ import jdk.internal.org.jline.utils.Log;
 public class backupServiceTest {
 
 	private Logger log = Logger.getLogger("aaa");
-	@Test
+	//@Test
 	public void test1() throws Exception 
 	{
 		String xmlpath = "classpath:applicationContext.xml";
@@ -40,6 +46,30 @@ public class backupServiceTest {
 		ipfs.start("192.168.99.1");
 		log.info(ipfs.UploadFile("C:\\Users\\Administrator\\.selfDispatch\\节点维护表\\QmRr6pJHrQBxhBgzkVZXbdN58sM8UC3PX3EQk8MhYkjsRT.table"));
 		log.info(bcs.getNodebackupTable("QmRr6pJHrQBxhBgzkVZXbdN58sM8UC3PX3EQk8MhYkjsRT").getHash());
+	}
+	
+	@Test
+	public void test3() 
+	{
+		Map<String,String> ss = new HashMap<String,String>();
+		ss.put("dong", "1");
+		ss.put("xi", "2");
+		
+		Set<String> set = ss.keySet();
+		Iterator<String> it = set.iterator();
+		//List<String> hadsend = new ArrayList<String>();
+		
+		while(it.hasNext()) 
+		{
+			String s = it.next();
+			
+			log.info(s+":"+ss.get(s));
+			
+		}
+		ss.remove("dong");
+		
+		
+		
 	}
 }
 

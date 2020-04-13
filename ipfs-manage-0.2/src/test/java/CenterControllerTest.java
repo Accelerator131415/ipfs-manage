@@ -25,7 +25,7 @@ public class CenterControllerTest {
 		CenterController cc = (CenterController)applicationContext.getBean("CenterController");
 		//SendMessageService ss = (SendMessageService)applicationContext.getBean("SendMessageService");
 		cc.start();
-		cc.uploadFile("N:\\", "01-基于PKI的二维码安全认证系统-三未信安.docx");
+		cc.uploadFile("N:", "01-基于PKI的二维码安全认证系统-三未信安.docx");
 		
 		while(true) 
 		{

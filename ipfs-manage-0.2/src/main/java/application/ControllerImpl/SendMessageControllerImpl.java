@@ -84,11 +84,11 @@ public class SendMessageControllerImpl implements SendMessageController {
 					IPFSFileTable nodebackup = nodebackuptable.getIPFSFileTablebyhash(filehash);
 					
 					one.setFilehash(filehash);
-					for(int i=0;i<backupController.limit || i<table.getNum();i++) 
+					for(int i=0;i<backupController.limit && i<table.getNum();i++) 
 					{
 						//设置要发送的主机IP。
 						issend = false;
-						one.setBackupIp(table.getOnlineNodes().get(r.nextInt()%table.getNum()));
+						one.setBackupIp(table.getOnlineNodes().get(r.nextInt(table.getNum())%table.getNum()));
 						
 						
 						for(int a=0;a<hadsend.size();a++) 
@@ -100,10 +100,12 @@ public class SendMessageControllerImpl implements SendMessageController {
 						}
 						if(issend) 
 						{
+							//i--;
 							continue;
 						}
 						hadsend.add(one.getBackupIp());
 						sendService.sendMessage(one);
+						log.info("sendmessage:hash is:"+filehash);
 						
 					}
 					

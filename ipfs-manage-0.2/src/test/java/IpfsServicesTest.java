@@ -82,7 +82,7 @@ public class IpfsServicesTest {
 		IpfsServices ipfsd = new  IpfsServicesImpl();
 		ipfsd.start("192.168.99.1");
 		log.info("文件的哈希值:"+ipfsd.UploadFile("D:\\我的大学\\毕业设计\\实验文件夹\\ceshis"));
-		log.info("文件目录的哈希值:"+ipfsd.UploadFile("D:\\我的大学\\毕业设计\\实验文件夹\\"));
+		//log.info("文件目录的哈希值:"+ipfsd.UploadFile("D:\\我的大学\\毕业设计"));
 	
 		ipfsd.DownloadFile("QmRr6pJHrQBxhBgzkVZXbdN58sM8UC3PX3EQk8MhYkjsRT", "fileDir");
 	

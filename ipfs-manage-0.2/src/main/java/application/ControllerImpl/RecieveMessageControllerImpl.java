@@ -91,6 +91,7 @@ public class RecieveMessageControllerImpl implements RecieveMessageController {
 			{
 				while(!messages.isEmpty()) 
 				{
+					
 					Message one = RecieveMessageController.removeMessage(0);
 					
 					if(one.isBackup()) 
@@ -100,6 +101,7 @@ public class RecieveMessageControllerImpl implements RecieveMessageController {
 							blockChain.updateLocalNodebackTable(one.getFilehash());
 							IPFSFileTable node_filetable = file_node.getIPFSFileTablebyhash(one.getFilehash());							
 							backupController.backuplist.get(one.getFilehash()).setNum(node_filetable.getOnlinenum());
+							log.info("lalala这是一条回执消息："+one.getFilehash());
 						}		
 					}
 					
@@ -112,16 +114,27 @@ public class RecieveMessageControllerImpl implements RecieveMessageController {
 					}	
 					
 					log.info("已处理来自："+one.getSenderIp()+"的消息");
+				
+					
+					
+					
 				}
 				
 				
 				while(!unlinemessages.isEmpty()) 
 				{				
-					UnlineMessage one = unlinemessages.remove(0);
+				
+				
+					UnlineMessage one = RecieveMessageController.removeUnlinemessage(0);
 					
 					selfdispatch.selfdiapatch(one.getUnlineip());
 					
 					log.info("已处理来自:"+one.getUnlineip()+"的下线信息");
+				
+					
+					
+					
+					
 					
 					
 					
@@ -137,10 +150,7 @@ public class RecieveMessageControllerImpl implements RecieveMessageController {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 		
 		
 		

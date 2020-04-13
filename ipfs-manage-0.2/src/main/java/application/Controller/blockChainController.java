@@ -19,7 +19,7 @@ public interface blockChainController {
 	
 	public hashnode updateLocalOnlinenodeTable() throws Exception;
 	
-	public hashnode updateLocalNodebackTable(String filehash) throws Exception;
+	public hashnode updateLocalNodebackTable(String filehash);
 	
 	public hashnode updateLocalNodefileTable(String ip) throws Exception;
 	

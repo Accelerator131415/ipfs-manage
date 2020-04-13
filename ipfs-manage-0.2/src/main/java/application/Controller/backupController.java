@@ -9,7 +9,7 @@ import application.MODEL.NODE.backupNode;
 
 public interface backupController extends Runnable {
 
-	public static int limit = 10;
+	public static int limit = 1;
 	
 	public static Map<String,backupNode> backuplist  = new HashMap<String,backupNode>();
 	
@@ -17,7 +17,7 @@ public interface backupController extends Runnable {
 	public void noticebackup(String filehash) throws Exception;
 	
 	//接受到通知，自己备份这个文件
-	public boolean selfbackup(String filehash) throws Exception;
+	public boolean selfbackup(String filehash);
 
 	public void randomselectMain(String filehash) throws InterruptedException, Exception;
 	

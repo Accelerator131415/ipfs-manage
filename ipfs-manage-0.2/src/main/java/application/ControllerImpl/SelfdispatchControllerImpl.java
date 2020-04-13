@@ -73,7 +73,8 @@ public class SelfdispatchControllerImpl implements SelfdispatchController {
 	}
 
 	@Override
-	public void selfdiapatch(String ip) throws Exception {
+	public void selfdiapatch(String ip) 
+	{
 		// TODO Auto-generated method stub
 		
 		
@@ -105,6 +106,9 @@ public class SelfdispatchControllerImpl implements SelfdispatchController {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			log.info("自我调度失败，原因：没有找到主机IP");
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -91,11 +91,23 @@ public class blockChainControllerImpl implements blockChainController {
 		return hash;
 	}
 	@Override
-	public hashnode updateLocalNodebackTable(String filehash) throws Exception 
+	public hashnode updateLocalNodebackTable(String filehash)
 	{
-		hashnode hash = blockChain.getNodebackupTable(filehash);
-		ipfs.DownloadTable(hash.getHash(),nodebackuptable.getTABLE(filehash));
-		//log.info("更新:\""+filehash+"\"的节点在线表成功");
+		hashnode hash ;
+		try {
+			hash = blockChain.getNodebackupTable(filehash);
+			//log.info("gagagaga");
+			//log.info(hash.getHash());
+			ipfs.DownloadTable(hash.getHash(),nodebackuptable.getTABLE(filehash));
+			//log.info("更新:\""+filehash+"\"的节点在线表成功");
+			return hash;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		hash = new hashnode();
+		hash.setHash("");
+		hash.setVersion(0);
 		return hash;
 	}
 	@Override
@@ -172,6 +184,8 @@ public class blockChainControllerImpl implements blockChainController {
 			Thread.sleep(100);
 		}
 		
+		Thread.sleep(100);
+		
 		for(int i=0;i<MainnodeThreads.size();i++) 
 		{
 			MainnodeThreads.get(i).interrupt();
@@ -238,6 +252,8 @@ public class blockChainControllerImpl implements blockChainController {
 			Thread.sleep(100);
 		}
 		
+		Thread.sleep(100);
+		
 		for(int i=0;i<NamehashhadSend.size();i++) 
 		{
 			NamehashThreads.get(i).interrupt();
@@ -297,6 +313,7 @@ public class blockChainControllerImpl implements blockChainController {
 			Thread.sleep(100);
 		}
 		
+		Thread.sleep(100);
 		
 		for(int i=0;i<OnlineThreads.size();i++) 
 		{
@@ -363,6 +380,8 @@ public class blockChainControllerImpl implements blockChainController {
 			Thread.sleep(100);
 		}
 		
+		Thread.sleep(100);
+		
 		for(int i=0;i<NodefilehadSend.size();i++) 
 		{
 			NodefileThreads.get(i).interrupt();
@@ -393,9 +412,13 @@ public class blockChainControllerImpl implements blockChainController {
 					int num = r.nextInt(online.getNum())%online.getNum();
 					if(!isNodebackupSend(online.getOnlineNodes().get(num))) 
 					{
-						NodebackuphadSend.add(online.getOnlineNodes().get(num));
-						boolean sucess;
+						
 						try {
+							NodebackuphadSend.add(online.getOnlineNodes().get(num));
+							boolean sucess;
+							log.info("aaaaaaaaaaaaaaaaaa:zaishishi");
+							log.info("传的是这个哈希："+hash.getHash());
+							log.info("传的是这个ip:"+online.getOnlineNodes().get(num));
 							sucess = blockChain.updateNodebackupTable(filehash, hash, online.getOnlineNodes().get(num));
 							
 							if(NodebackupLock) 
@@ -420,6 +443,7 @@ public class blockChainControllerImpl implements blockChainController {
 			Thread.sleep(100);
 		}
 		
+		Thread.sleep(100);
 		for(int i=0;i<NodebackupThreads.size();i++) 
 		{
 			NodebackupThreads.get(i).interrupt();

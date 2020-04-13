@@ -2,6 +2,7 @@ package application.ControllerImpl;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -68,40 +69,39 @@ public class backupControllerImpl implements backupController {
 		for(int i=0;i<files.size();i++) 
 		{
 			backupNode newone = new backupNode();
-			newone.setFilehash(files.get(i));
-			log.info(">>>:"+files.get(i));
+			
+			//log.info(">>>:"+files.get(i));
 			//从区块链中下载该备份文件的已备份的节点表，如果曾经备份过，那就在原来的在线节点的数量的基础上去重新备份文件
 			blockChain.updateLocalNodebackTable(files.get(i));
 			IPFSFileTable itable = nodebackuptable.getIPFSFileTablebyhash(files.get(i));
-			
+			newone.setFilehash(files.get(i));
 			newone.setNum(itable.getOnlinenum());
 			
-			backupController.addBackuplist(filehash, newone);
+			backupController.addBackuplist(files.get(i), newone);
 		}
 	}
 
 	//接受到通知，自己备份这个文件
-	public boolean selfbackup(String filehash) throws Exception 
+	public boolean selfbackup(String filehash) 
 	{
-		blockChain.updateLocalNodebackTable(filehash);
-		IPFSFileTable itable = nodebackuptable.getIPFSFileTablebyhash(filehash);
-		
-		if(itable.getOnlinenum()>=limit) 
-		{
-			log.info("文件备份数已足够，不需要再进行备份");
-			return true;			
-		}
-		
-		
-		
-		ipfs.backup(filehash);
-		
-		
-		IPFSNode inode = new IPFSNode();
-		InetAddress ip;
-		
-		log.info("正在备份:"+filehash+"文件");
 		try {
+			blockChain.updateLocalNodebackTable(filehash);
+			IPFSFileTable itable = nodebackuptable.getIPFSFileTablebyhash(filehash);
+			
+			if(itable.getOnlinenum()>=limit) 
+			{
+				//log.info("文件备份数已足够，不需要再进行备份");
+				return true;			
+			}
+				
+			ipfs.backup(filehash);
+			
+			
+		
+			InetAddress ip;
+			
+			log.info("正在备份:"+filehash+"文件");
+		
 			ip = InetAddress.getLocalHost();
 			
 			String hash;
@@ -137,6 +137,7 @@ public class backupControllerImpl implements backupController {
 				
 			}while(!blockChain.updateMainnodeTable(update));
 			
+			IPFSNode inode = new IPFSNode();
 			update = new hashnode();
 			inode.setIp(ip.getHostAddress());
 			inode.setOnline(true);
@@ -146,10 +147,13 @@ public class backupControllerImpl implements backupController {
 				blockChain.updateLocalOnlinenodeTable();
 				hashnode nodebackup = blockChain.updateLocalNodebackTable(filehash);
 				nodebackuptable.InsertNode(inode, filehash);
+				log.info("应该是这里！！！！！");
 				hash = ipfs.UploadFile(ipfs.getTableaddr()+nodebackuptable.getTABLE(filehash));
 				update.setHash(hash);
 				update.setVersion(nodebackup.getVersion());				
 				log.info("正在尝试更新"+filehash+".table");
+				
+				
 			}
 			while(!blockChain.updateNodebackTable(filehash,update));
 			log.info("更新"+filehash+".table成功");
@@ -170,15 +174,25 @@ public class backupControllerImpl implements backupController {
 			log.info("已成功备份:"+filehash+"文件");
 			return true;
 			
+		
+		
+			
+			
+			
+		
+		
 			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			log.info("备份："+filehash+"文件失败，原因：没有找到主机IP");
 			e.printStackTrace();			
 			return false;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-		
+		return false;
 		
 		
 	}
@@ -210,16 +224,30 @@ public class backupControllerImpl implements backupController {
 			{
 				Set<String> set = backuplist.keySet();
 				Iterator<String> it = set.iterator();
+				List<String> needRemove = new ArrayList<String>();
 				while(it.hasNext()) 
 				{
 					String filehash = it.next();
 					//当备份数量达到要求时，删除链表里该节点的信息，并且为其选出主节点
 					if(backuplist.get(filehash).getNum()>=limit) 
 					{
-						backupController.removeBackupNode(filehash);
+						needRemove.add(filehash);
+						//backupController.removeBackupNode(filehash);
 						//randomselectMain(filehash);
 					}
 					
+				
+//					try {
+//						Thread.sleep(100);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+				}
+				
+				for(int i=0;i<needRemove.size();i++) 
+				{
+					backupController.removeBackupNode(needRemove.get(i));
 				}
 				
 			}

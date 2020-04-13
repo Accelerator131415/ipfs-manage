@@ -19,7 +19,7 @@ import io.ipfs.multihash.Multihash;
 @Service("IpfsServices")
 public class IpfsServicesImpl implements IpfsServices {
 
-	private IPFS ipfs;// = new IPFS("/ip4/192.168.43.135/tcp/5001");
+	private IPFS ipfs = new IPFS("/ip4/192.168.99.1/tcp/5001");
 	private String downloadAddr = initService.defaultAddr+"实验文件夹\\";
 	private String backupAddr = initService.defaultAddr+"备份文件夹\\";
 	private String tableAddr = initService.defaultAddr+"节点维护表\\";
@@ -64,7 +64,7 @@ public class IpfsServicesImpl implements IpfsServices {
 		}
 				
 		
-		return null;
+		return "";
 		
 	}
 
@@ -75,6 +75,7 @@ public class IpfsServicesImpl implements IpfsServices {
 		{
 			Multihash filePointer = Multihash.fromBase58(hash);
 			//List<MerkleNode> mns = ipfs.ls(filePointer);
+			//log.info(filePointer.toString());
 			byte[] file = ipfs.cat(filePointer);			
 			File downloadfile = new File(downloadAddr+filename);
 			
@@ -127,7 +128,7 @@ public class IpfsServicesImpl implements IpfsServices {
 			FileOutputStream fop = new FileOutputStream(downloadTable,false);
 			
 			//FileWriter fw = new FileWriter(downloadTable,false);
-			fop.write(file);;
+			fop.write(file);
 			fop.flush();
 			fop.close();
 //			log.info("从IPFS中下载了表："+filename+"\n"
@@ -215,9 +216,8 @@ public class IpfsServicesImpl implements IpfsServices {
 						findfile(mns.get(i).links.get(a).hash,filehashlist);
 					}
 					
-			}
-			
-			
+				}
+				
 			}
 			
 			
@@ -243,7 +243,7 @@ public class IpfsServicesImpl implements IpfsServices {
 	@Override
 	public void start(String ip) {
 		// TODO Auto-generated method stub
-		
+		//String param = java.net.URLEncoder.encode(");
 		ipfs = new IPFS("/ip4/"+ip+"/tcp/5001");
 		
 	}

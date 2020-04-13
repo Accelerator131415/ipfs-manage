@@ -12,6 +12,7 @@ public class MainNodeTableServiceTest {
 
 	private Logger log = Logger.getLogger("asdadsd");
 	
+	//@Test
 	public void test1() 
 	{
 		MainNodeTableService mts = new MainNodeTableServiceImpl();

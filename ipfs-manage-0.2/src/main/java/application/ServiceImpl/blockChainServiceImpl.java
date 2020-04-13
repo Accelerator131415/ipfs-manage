@@ -34,7 +34,7 @@ public class blockChainServiceImpl implements blockChainService {
 	private String port = "1314";
 	//private String blockAccount = "0x067dea8624407ccce9344684f65ea638d4d2cddc";
 	private Credentials credential;
-	private String contractAddr = "0xa58d3a0f9a31327f793c135ca8215834cddbefc0";
+	private String contractAddr = "0x4ea6ce03a330a3be5e32fbf851c42ab008899ed1";
 	private String password = "123";
 	private String filepath = "N:\\blockchain\\data\\keystore\\UTC--2020-03-25T11-33-08.192202800Z--2db370c14100919c6b8d14c5f71ff357d45fbdd3";
 	private Table table;
@@ -50,7 +50,7 @@ public class blockChainServiceImpl implements blockChainService {
 		
 		if(getNodebackupTable(filename).getHash().equalsIgnoreCase(hash.getHash())) 
 		{
-			log.info("更新 "+filename+" 在线表的哈希");
+			//log.info("更新 "+filename+" 在线表的哈希");
 			return true;
 		}
 		else 
