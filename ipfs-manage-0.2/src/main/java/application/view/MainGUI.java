@@ -36,34 +36,19 @@ public class MainGUI implements Runnable {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		
-		String xmlpath = "classpath:applicationContext.xml";
-		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(xmlpath);
-		
-		center = (CenterController)applicationContext.getBean("CenterController");
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainGUI window = new MainGUI();
-					
-					window.frmIpfs.setVisible(true);
-					new Thread(window).start();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		
-		
-	}
+	
 
 	/**
 	 * Create the application.
 	 */
 	public MainGUI() {
+		String xmlpath = "classpath:applicationContext.xml";
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(xmlpath);
+		
+		center = (CenterController)applicationContext.getBean("CenterController");
+		
 		initialize();
+		
 	}
 
 	/**
@@ -222,6 +207,7 @@ public class MainGUI implements Runnable {
 		
 		infomation = new startJPanel();
 		frmIpfs.getContentPane().add(infomation,BorderLayout.CENTER);
+		frmIpfs.setVisible(true);
 	}
 
 	@Override
