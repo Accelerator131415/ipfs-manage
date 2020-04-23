@@ -33,6 +33,8 @@ public class MainGUI implements Runnable {
 	public static CenterController center;
 	private Logger log = Logger.getLogger("ipfs-manage-view");
 	private JButton closeButton,startButton;
+	private waittingDialog wait;
+	private ExitDialog exit;
 	/**
 	 * Launch the application.
 	 */
@@ -85,7 +87,7 @@ public class MainGUI implements Runnable {
 				SwingWorker<Void,Void> worker = new SwingWorker<Void,Void>()
 				{
 					@Override
-					protected Void doInBackground() throws Exception {
+					protected Void doInBackground() {
 						// TODO Auto-generated method stub
 						
 					
@@ -93,7 +95,16 @@ public class MainGUI implements Runnable {
 						//new Thread(infomation).start();
 						infomation.drawStart();
 						try {
+							new Thread(new Runnable() {
+
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									wait = new waittingDialog();
+									
+								}}).start();
 							center.start();
+							wait.startSucess();
 							startButton.setEnabled(false);
 							closeButton.setEnabled(true);
 						} catch (IOException e) {
@@ -104,6 +115,10 @@ public class MainGUI implements Runnable {
 							// TODO Auto-generated catch block
 							//e.printStackTrace();
 							new BlockChainDialog();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							new ExceptionDialog();
 						}
 						
 						return null;
@@ -132,7 +147,16 @@ public class MainGUI implements Runnable {
 					protected Void doInBackground() throws Exception {
 						// TODO Auto-generated method stub
 						
+						new Thread(new Runnable() {
+
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								
+								exit = new ExitDialog();
+							}});
 						center.exit();
+						exit.closeSucess();
 						closeButton.setEnabled(false);
 						startButton.setEnabled(true);
 						//infomation = new closeJPanel();
@@ -215,9 +239,10 @@ public class MainGUI implements Runnable {
 		// TODO Auto-generated method stub
 		while(true) 
 		{
+			infomation.revalidate();
 			frmIpfs.repaint();
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -9,12 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class BlockChainDialog extends JDialog {
+public class ExceptionDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 
@@ -23,7 +22,7 @@ public class BlockChainDialog extends JDialog {
 	 */
 //	public static void main(String[] args) {
 //		try {
-//			BlockChainDialog dialog = new BlockChainDialog();
+//			ExceptionDialog dialog = new ExceptionDialog();
 //			
 //		} catch (Exception e) {
 //			e.printStackTrace();
@@ -33,31 +32,26 @@ public class BlockChainDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public BlockChainDialog() {
+	public ExceptionDialog() {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(Color.LIGHT_GRAY);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
-			JLabel titleLabel = new JLabel("警告");
-			titleLabel.setBackground(Color.LIGHT_GRAY);
-			titleLabel.setFont(new Font("宋体", Font.PLAIN, 40));
-			titleLabel.setForeground(Color.YELLOW);
+			JLabel titleLabel = new JLabel("未知异常");
+			titleLabel.setFont(new Font("宋体", Font.PLAIN, 30));
 			titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			contentPanel.add(titleLabel, BorderLayout.NORTH);
 		}
 		{
-			JLabel Label = new JLabel("区块链连接异常，请检查密钥文件路径和密码");
-			Label.setForeground(Color.YELLOW);
-			Label.setFont(new Font("宋体", Font.PLAIN, 20));
-			Label.setHorizontalAlignment(SwingConstants.CENTER);
-			contentPanel.add(Label, BorderLayout.CENTER);
+			JLabel lblNewLabel = new JLabel("不知道发生了什么异常，建议找管理员或重启");
+			lblNewLabel.setFont(new Font("宋体", Font.PLAIN, 20));
+			lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			contentPanel.add(lblNewLabel, BorderLayout.CENTER);
 		}
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBackground(Color.LIGHT_GRAY);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
@@ -69,13 +63,13 @@ public class BlockChainDialog extends JDialog {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						dispose();
+						dispose();					
 					}
 				});
+				
 				buttonPane.add(cancelButton);
 			}
 		}
-		
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setVisible(true);
 	}

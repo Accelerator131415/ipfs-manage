@@ -19,7 +19,6 @@ public interface CenterController {
 		
 	public void exit() throws Exception;
 
-
 	public boolean isService();
 	
 	public NamehashTable getFileHashInfo() throws Exception;

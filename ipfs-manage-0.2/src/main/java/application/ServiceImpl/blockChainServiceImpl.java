@@ -34,7 +34,7 @@ public class blockChainServiceImpl implements blockChainService {
 	private String port = "1314";
 	//private String blockAccount = "0x067dea8624407ccce9344684f65ea638d4d2cddc";
 	private Credentials credential;
-	private String contractAddr = "0xe68a6c4e3d9fa6a452f415a3972db149e28e0614";
+	private String contractAddr = "0xf2335c03c04dbd146cf8ac1ceb9715f3d361f69d";
 	private String password = "123";
 	private String filepath = "N:\\blockchain\\data\\keystore\\UTC--2020-03-25T11-33-08.192202800Z--2db370c14100919c6b8d14c5f71ff357d45fbdd3";
 	private Table table;

@@ -54,8 +54,6 @@ public class startJPanel extends JPanel {
 	public void drawStart() 
 	{
 		removeAll();
-
-
 		setLayout(new BorderLayout(0, 0));
 		
 		serviceInfo = new JLabel();
@@ -74,7 +72,8 @@ public class startJPanel extends JPanel {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						//e.printStackTrace();
+						new InterruptDialog();
 					}
 				}
 				serviceInfo.setText("备份服务已启动");
@@ -108,10 +107,16 @@ public class startJPanel extends JPanel {
 				{
 
 					@Override
-					protected Void doInBackground() throws Exception {
+					protected Void doInBackground() {
 						// TODO Auto-generated method stub
 						
-						MainGUI.center.uploadFile(path.getText(), filename.getText());
+						try {
+							MainGUI.center.uploadFile(path.getText(), filename.getText());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							//e.printStackTrace();
+							new ExceptionDialog();
+						}
 						//infomation = new closeJPanel();
 						//frmIpfs.getContentPane().add(infomation,BorderLayout.CENTER);
 						//new Thread(infomation).start();
@@ -191,10 +196,16 @@ public class startJPanel extends JPanel {
 				{
 
 					@Override
-					protected Void doInBackground() throws Exception {
+					protected Void doInBackground() {
 						// TODO Auto-generated method stub
 						
-						MainGUI.center.downloadFile(hash.getText());
+						try {
+							MainGUI.center.downloadFile(hash.getText());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							//e.printStackTrace();
+							new ExceptionDialog();
+						}
 						//infomation = new closeJPanel();
 						//frmIpfs.getContentPane().add(infomation,BorderLayout.CENTER);
 						//new Thread(infomation).start();
@@ -266,7 +277,7 @@ public class startJPanel extends JPanel {
 				{
 
 					@Override
-					protected Void doInBackground() throws Exception {
+					protected Void doInBackground(){
 						// TODO Auto-generated method stub
 						
 						drawFileonline(serchFile.getText());
@@ -340,7 +351,7 @@ public class startJPanel extends JPanel {
 				{
 
 					@Override
-					protected Void doInBackground() throws Exception {
+					protected Void doInBackground(){
 						// TODO Auto-generated method stub
 						
 						drawFileonline(filehash);
@@ -367,7 +378,7 @@ public class startJPanel extends JPanel {
 				{
 
 					@Override
-					protected Void doInBackground() throws Exception {
+					protected Void doInBackground() {
 						// TODO Auto-generated method stub
 						
 						drawSerch();
@@ -438,6 +449,7 @@ public class startJPanel extends JPanel {
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+					new IODialog();
 				}
 			}
 		});
@@ -459,6 +471,7 @@ public class startJPanel extends JPanel {
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+					new IODialog();
 				}
 				
 			}

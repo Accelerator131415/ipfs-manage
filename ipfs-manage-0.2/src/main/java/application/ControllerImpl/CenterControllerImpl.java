@@ -67,6 +67,9 @@ public class CenterControllerImpl implements CenterController {
 	
 	private Logger log = Logger.getLogger("ipfs-manage-controller");
 	
+	private InetAddress ip;
+	
+	//private String ipAddr;
 	private boolean service =false;
 	
 	//启动中心服务器，作用：
@@ -83,9 +86,10 @@ public class CenterControllerImpl implements CenterController {
 		
 		try {
 			String hash;
-			InetAddress ip = InetAddress.getLocalHost();
 			
+			ip = InetAddress.getLocalHost();
 			
+			//ipAddr = ip.getHostAddress();
 			hashnode newone = new hashnode();
 			//更新在线节点表
 			do 
@@ -116,15 +120,15 @@ public class CenterControllerImpl implements CenterController {
 				hashnode ha = new hashnode();
 				do 
 				{			
-					log.info(">>>???");
+					//log.info(">>>???");
 					log.info(filehash);
 					hashnode nodeback = blockChain.updateLocalNodebackTable(filehash);		
-					log.info("是这儿？");
+					//log.info("是这儿？");
 					fileonlinetable.InsertNode(inode,filehash);
 					String updatehash = ipfs.UploadFile(ipfs.getTableaddr()+fileonlinetable.getTABLE(filehash));
 					ha.setHash(updatehash);
 					ha.setVersion(nodeback.getVersion());
-					log.info("还是这儿？");
+					//log.info("还是这儿？");
 					
 				}while(!blockChain.updateNodebackTable(filehash, ha));
 				
@@ -167,23 +171,8 @@ public class CenterControllerImpl implements CenterController {
 		try {
 			//String hash;
 			String newhash;
-			InetAddress ip;
-			ip = InetAddress.getLocalHost();
-			
-			
 			log.info("正在准备关闭中心控制器···");
-			hashnode newone = new hashnode();
-			//更新在线节点表，将该地址从在线节点表中删除
-			do
-			{
-				hashnode online = blockChain.updateLocalOnlinenodeTable();
-				onlineTable.deleteIp(ip.getHostAddress());
-				newhash = ipfs.UploadFile(ipfs.getTableaddr()+onlineTable.getTABLE());
-				newone.setHash(newhash);
-				newone.setVersion(online.getVersion());
-				log.info("正在尝试更新在线节点表...");
-			}while(!blockChain.updateOnlinenodeTable(newone));
-			log.info("更新在线节点表成功");
+			
 			
 			//RecieveThread.interrupt();
 			//recieveService.closeService();
@@ -205,13 +194,26 @@ public class CenterControllerImpl implements CenterController {
 				{
 					
 					hashnode nodeback = blockChain.updateLocalNodebackTable(filehash);			
-					fileonlinetable.updateNode(inode,filehash);
+					fileonlinetable.InsertNode(inode,filehash);
 					String updatehash = ipfs.UploadFile(ipfs.getTableaddr()+fileonlinetable.getTABLE(filehash));
 					ha.setHash(updatehash);
 					ha.setVersion(nodeback.getVersion());
 				}while(!blockChain.updateNodebackTable(filehash, ha));
 				
 			}
+			
+			hashnode newone = new hashnode();
+			//更新在线节点表，将该地址从在线节点表中删除
+			do
+			{
+				hashnode online = blockChain.updateLocalOnlinenodeTable();
+				onlineTable.deleteIp(ip.getHostAddress());
+				newhash = ipfs.UploadFile(ipfs.getTableaddr()+onlineTable.getTABLE());
+				newone.setHash(newhash);
+				newone.setVersion(online.getVersion());
+				log.info("正在尝试更新在线节点表...");
+			}while(!blockChain.updateOnlinenodeTable(newone));
+			log.info("更新在线节点表成功");
 			
 			recieveMessage.close();
 			sendMessage.closeSevice();

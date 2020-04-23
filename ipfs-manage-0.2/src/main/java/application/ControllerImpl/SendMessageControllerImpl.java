@@ -1,5 +1,7 @@
 package application.ControllerImpl;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -55,68 +57,82 @@ public class SendMessageControllerImpl implements SendMessageController {
 			{
 				try {
 					blockChain.updateLocalTable();
+					
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block  
 					e1.printStackTrace();
 				}
-				
-				OnlineNodeTable table = onlinetable.getTable();
-				boolean issend;
-				Random r = new Random();
-				
-				Message one = new Message();
-				
-				one.setBackup(false);
-				
-				Set<String> set = backupController.backuplist.keySet();
-				Iterator<String> it = set.iterator();
-				List<String> hadsend = new ArrayList<String>();
-				//每个文件都给
-				while(it.hasNext()) 
-				{
-					String filehash = it.next();
-					try {
-						blockChain.updateLocalNodebackTable(filehash);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					IPFSFileTable nodebackup = nodebackuptable.getIPFSFileTablebyhash(filehash);
+				InetAddress ip;
+				try {
+					ip = InetAddress.getLocalHost();
+					OnlineNodeTable table = onlinetable.getTable();
+					boolean issend;
+					Random r = new Random();
 					
-					one.setFilehash(filehash);
-					for(int i=0;i<backupController.limit && i<table.getNum();i++) 
+					Message one = new Message();
+					
+					one.setBackup(false);
+					
+					Set<String> set = backupController.backuplist.keySet();
+					Iterator<String> it = set.iterator();
+					List<String> hadsend = new ArrayList<String>();
+					//每个文件都给
+					while(it.hasNext()) 
 					{
-						//设置要发送的主机IP。
-						issend = false;
-						one.setBackupIp(table.getOnlineNodes().get(r.nextInt(table.getNum())%table.getNum()));
+						String filehash = it.next();
+						try {
+							blockChain.updateLocalNodebackTable(filehash);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						IPFSFileTable nodebackup = nodebackuptable.getIPFSFileTablebyhash(filehash);
 						
-						
-						for(int a=0;a<hadsend.size();a++) 
+						one.setFilehash(filehash);
+						for(int i=0;i<backupController.limit && i<table.getNum();i++) 
 						{
-							if(hadsend.get(a).equalsIgnoreCase(one.getBackupIp()) || nodebackup.getNodebyIp(one.getBackupIp())!=null)
+							//设置要发送的主机IP。
+							issend = false;
+							one.setBackupIp(table.getOnlineNodes().get(r.nextInt(table.getNum())%table.getNum()));
+							
+							
+							for(int a=0;a<hadsend.size();a++) 
 							{
-								issend =true;
+								if(hadsend.get(a).equalsIgnoreCase(one.getBackupIp()) || nodebackup.getNodebyIp(one.getBackupIp())!=null)
+								{
+									issend =true;
+								}
 							}
+							
+							//添加一个条件，使通知备份的IP不包括自己
+							if(one.getBackupIp().equalsIgnoreCase(ip.getHostAddress()))
+								issend = true;
+							
+							if(issend) 
+							{
+								//i--;
+								continue;
+							}
+							hadsend.add(one.getBackupIp());
+							sendService.sendMessage(one);
+							log.info("sendmessage:hash is:"+filehash);
+							
 						}
-						if(issend) 
-						{
-							//i--;
-							continue;
-						}
-						hadsend.add(one.getBackupIp());
-						sendService.sendMessage(one);
-						log.info("sendmessage:hash is:"+filehash);
-						
 					}
-					
-					
-					
-					
-					
+					}catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 				
-				
+					
+					
+					
+					
+					
 			}
+				
+				
+			
 			
 			try {
 				Thread.sleep(waittime);

@@ -63,20 +63,32 @@ public class IpfsServicesTest {
 //		
 //	}
 //	
-	
+	//@Test
 	public void test3() 
 	{
 		IpfsServices is = new IpfsServicesImpl();
+		is.start("192.168.99.1");
 		//is.backup("");
+		
 		List<String> ls = is.getSonfile("QmRr6pJHrQBxhBgzkVZXbdN58sM8UC3PX3EQk8MhYkjsRT");
-		for(int i=0;i<ls.size();i++) 
-		{
-			System.out.println(ls.get(i));
-		}
+//		for(int i=0;i<ls.size();i++) 
+//		{
+//			System.out.println(ls.get(i));
+//		}
 		//is.backup("QmUCvpaDziLzgADYiBFeQg5NCH2sC1DHxf346Rj56PYrM8");
 	}
-	
 	@Test
+	public void test6() throws IOException 
+	{
+		IPFS ipfs = new IPFS("/ip4/192.168.99.1/tcp/5001");
+		Multihash filePointer = Multihash.fromBase58("QmRr6pJHrQBxhBgzkVZXbdN58sM8UC3PX3EQk8MhYkjsRT");
+	
+		List<MerkleNode> res = ipfs.ls(filePointer);
+		log.info(res.get(0).toJSONString());
+	}
+	
+	
+	//@Test
 	public void test5() 
 	{
 		IpfsServices ipfsd = new  IpfsServicesImpl();

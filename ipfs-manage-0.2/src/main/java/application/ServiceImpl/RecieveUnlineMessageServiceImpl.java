@@ -49,8 +49,8 @@ public class RecieveUnlineMessageServiceImpl implements RecieveUnlineMessageServ
 				}
 				
 			}
-			String unlineip = new String(data, 0, middle-1);
-			String aimip = new String(data,middle,end-middle-1);
+			String unlineip = new String(data, 0, middle);
+			String aimip = new String(data,middle,end-middle);
 			message.setUnlineip(unlineip);
 			message.setAimip(aimip);
 			

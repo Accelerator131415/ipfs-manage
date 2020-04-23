@@ -29,7 +29,7 @@ public class IPFSFileTableServiceTest {
 		ifts.getNodesNum (filename);
 	
 	}
-	@Test
+	//@Test
 	public void test2() 
 	{
 		IPFSFileTableService ifts = new IPFSFileTableServiceImpl();
@@ -38,5 +38,15 @@ public class IPFSFileTableServiceTest {
 		{
 			log.info(ifts.getIPFSFileTablebyhash("QmRr6pJHrQBxhBgzkVZXbdN58sM8UC3PX3EQk8MhYkjsRT").getNodes().get(i).getIp()+"-"+ifts.getIPFSFileTablebyhash("QmRr6pJHrQBxhBgzkVZXbdN58sM8UC3PX3EQk8MhYkjsRT").getNodes().get(i).isOnline());
 		}
+	}
+	@Test
+	public void test3() 
+	{
+		IPFSFileTableService ifts = new IPFSFileTableServiceImpl();
+		IPFSNode i = new IPFSNode();
+		i.setIp("192.168.179.146");
+		i.setOnline(false);
+		log.info(ifts.InsertNode(i,"QmeRyinfeum9fNhtKL6sMHBoseMc6nUJmpVpvtnWbmTTk5")+"");
+		
 	}
 }

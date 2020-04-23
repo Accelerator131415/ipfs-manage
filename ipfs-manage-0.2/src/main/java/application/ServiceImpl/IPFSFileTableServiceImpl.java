@@ -131,12 +131,13 @@ public class IPFSFileTableServiceImpl implements IPFSFileTableService {
 						}
 					}
 					buf.replace(start+1, end, ""+inode.isOnline());
+					log.info("打印一下buf是啥："+buf.toString());
 					
 				}
 				buf.append(System.getProperty("line.separator"));
 				bufall.append(buf);
 			}
-			FileWriter fw = new FileWriter(new File(filename+".table"),false);
+			FileWriter fw = new FileWriter(new File(addr+filename+".table"),false);
 			fw.write(bufall.toString());
 			//log.info("更新表:"+filename+"中,节点"+inode.getIp()+"信息成功");
 			fw.flush();

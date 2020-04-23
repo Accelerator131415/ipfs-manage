@@ -169,10 +169,9 @@ public class blockChainControllerImpl implements blockChainController {
 							MainnodeSucess = sucess;
 							
 							MainnodeSend = false;
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							//e.printStackTrace();
-						}catch (Exception e) {
+						} 
+						catch (Exception e) {
+							MainnodehadSend.remove(online.getOnlineNodes().get(num));
 							// TODO Auto-generated catch block
 							//e.printStackTrace();
 						}				
@@ -231,12 +230,9 @@ public class blockChainControllerImpl implements blockChainController {
 							NamehashSend = false;
 							
 						}
-						catch(InterruptedException e) 
-						{
-							e.printStackTrace();
-						}
 						catch (Exception e) {
 							// TODO Auto-generated catch block
+							NamehashhadSend.remove(online.getOnlineNodes().get(num));
 							e.printStackTrace();
 						}
 						
@@ -302,6 +298,8 @@ public class blockChainControllerImpl implements blockChainController {
 							
 						
 						} catch (Exception e) {
+							
+							OnlinehadSend.remove(online.getOnlineNodes().get(num));
 							// TODO Auto-generated catch block
 							//e.printStackTrace();
 						}
@@ -367,6 +365,7 @@ public class blockChainControllerImpl implements blockChainController {
 						
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
+							NodefilehadSend.remove(online.getOnlineNodes().get(num));
 							e.printStackTrace();
 						}
 						
@@ -416,9 +415,9 @@ public class blockChainControllerImpl implements blockChainController {
 						try {
 							NodebackuphadSend.add(online.getOnlineNodes().get(num));
 							boolean sucess;
-							log.info("aaaaaaaaaaaaaaaaaa:zaishishi");
-							log.info("传的是这个哈希："+hash.getHash());
-							log.info("传的是这个ip:"+online.getOnlineNodes().get(num));
+//							log.info("aaaaaaaaaaaaaaaaaa:zaishishi");
+//							log.info("传的是这个哈希："+hash.getHash());
+//							log.info("传的是这个ip:"+online.getOnlineNodes().get(num));
 							sucess = blockChain.updateNodebackupTable(filehash, hash, online.getOnlineNodes().get(num));
 							
 							if(NodebackupLock) 
@@ -434,6 +433,7 @@ public class blockChainControllerImpl implements blockChainController {
 							
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
+							NodebackuphadSend.remove(online.getOnlineNodes().get(num));							
 							e.printStackTrace();
 						}						
 					}					
